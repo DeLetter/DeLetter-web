@@ -1,6 +1,18 @@
 import Head from 'next/head'
+import bundlr from 'utili/bundlr-basics'
+import { Email } from '@pages/email/types/email.interface'
 
 export default function Home() {
+
+  const makeArweave = async (data: Email) => {
+    const JSONData = JSON.stringify(data)
+    const tx = await bundlr.upload(JSONData, {
+      tags: [{ name: 'Content-Type', value: 'application/json' }],
+    })
+    console.log(tx)
+    return tx
+  }
+
   return (
     <>
       <Head>
@@ -10,7 +22,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main >
-        123
+        <h1>Arweave Bundlr</h1>
+        <button onClick={() => makeArweave({
+          from: 'tim',
+          to: 'joe',
+          subject: 'hello',
+          body: 'hello world'
+        })}>Make Arweave</button>
       </main>
     </>
   )

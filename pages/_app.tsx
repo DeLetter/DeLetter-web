@@ -19,13 +19,11 @@ export default function App({ Component, pageProps }: AppProps) {
       await (window as any).ethereum.enable()
       const provider = new providers.Web3Provider((window as any).ethereum);
       await provider._ready()
-      console.log('rpc:',process.env.PROVIDER_RPC )
-      const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: process.env.PROVIDER_RPC})
+      const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: process.env.PROVIDER_RPC })
       await bundlr.ready()
 
       setBundlrInstance(bundlr)
       bundlrRef.current = bundlr
-      fetchBalance()
     } catch (err) {
       console.log('error for initialize bundlr', err)
       alert('something went wrong')
@@ -41,6 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     initialBundlr();
+    fetchBalance();
   }, [])
 
   return (

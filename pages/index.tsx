@@ -2,16 +2,14 @@ import { useCallback, useContext, useState } from 'react'
 import Head from 'next/head'
 // import bundlr from '@utils/bundlr/bundlr-basics'
 import { MainContext } from '@utils/context'
-import { BigNumber } from 'ethers'
-import AuthConnectButton from '@modules/AuthConnectButton'
 import { Email } from '@pages/email/types/email.interface'
 
 export default function Home() {
   const [URI, setURI] = useState('')
-  const { bundlrInstance, initialBundlr, balance, fetchBalance } = useContext(MainContext)
+  const { bundlrInstance, balance, fetchBalance } = useContext(MainContext)
   const fundWallet = useCallback(async () => {
     try {
-      let response = await bundlrInstance?.fund(100000000000000000)
+      const response = await bundlrInstance?.fund(100000000000000000)
       console.log('Wallet funded: ', response)
       fetchBalance()
     } catch (err) {
@@ -19,7 +17,7 @@ export default function Home() {
       alert('something went wrong')
     }
 
-  }, [])
+  }, [bundlrInstance])
 
   //TODO: TO BE REMOVED
   // const parseInput = useCallback((input: number) => {
@@ -43,10 +41,10 @@ export default function Home() {
     })
     console.log(tx)
     return tx
-  }, [])
+  }, [bundlrInstance])
   const makeArweave = async (data: Email) => {
     try {
-      let tx = await uploadFile(data)
+      const tx = await uploadFile(data)
       setURI(`${(tx as any).id}`)
     } catch (err) {
       console.log('error for initialize bundlr', err)

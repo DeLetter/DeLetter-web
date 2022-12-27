@@ -63,7 +63,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {!balance && <button onClick={initBunder}>Initialize</button>}
         {balance && (
           <div className="flex flex-col items-center">
             <h1>

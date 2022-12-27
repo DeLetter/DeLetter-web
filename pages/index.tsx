@@ -17,23 +17,8 @@ export default function Home() {
       alert('something went wrong')
     }
 
-  }, [bundlrInstance])
+  }, [bundlrInstance,fetchBalance])
 
-  //TODO: TO BE REMOVED
-  // const parseInput = useCallback((input: number) => {
-  //   try {
-  //     const conv = BigNumber.from(input)
-  //     if (conv.lte(1)) {
-  //       console.log('error: value too small')
-  //       return
-  //     } else {
-  //       return conv
-  //     }
-  //   } catch (err) {
-  //     console.log('error: ', err)
-  //   }
-
-  // }, [])
   const uploadFile = useCallback(async (data: Email) => {
     const JSONData = JSON.stringify(data)
     const tx = await bundlrInstance?.upload(JSONData, {

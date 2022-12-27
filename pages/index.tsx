@@ -1,16 +1,57 @@
+import { useCallback, useContext, useState } from 'react'
 import Head from 'next/head'
-import bundlr from 'utili/bundlr-basics'
+// import bundlr from '@utils/bundlr/bundlr-basics'
+import { MainContext } from '@utils/context'
+import { BigNumber } from 'ethers'
+import AuthConnectButton from '@modules/AuthConnectButton'
 import { Email } from '@pages/email/types/email.interface'
 
 export default function Home() {
+  const [URI, setURI] = useState('')
+  const { bundlrInstance, initialBundlr, balance, fetchBalance } = useContext(MainContext)
+  const fundWallet = useCallback(async () => {
+    try {
+      let response = await bundlrInstance?.fund(100000000000000000)
+      console.log('Wallet funded: ', response)
+      fetchBalance()
+    } catch (err) {
+      console.log(err)
+      alert('something went wrong')
+    }
 
-  const makeArweave = async (data: Email) => {
+  }, [])
+
+  //TODO: TO BE REMOVED
+  // const parseInput = useCallback((input: number) => {
+  //   try {
+  //     const conv = BigNumber.from(input)
+  //     if (conv.lte(1)) {
+  //       console.log('error: value too small')
+  //       return
+  //     } else {
+  //       return conv
+  //     }
+  //   } catch (err) {
+  //     console.log('error: ', err)
+  //   }
+
+  // }, [])
+  const uploadFile = useCallback(async (data: Email) => {
     const JSONData = JSON.stringify(data)
-    const tx = await bundlr.upload(JSONData, {
+    const tx = await bundlrInstance?.upload(JSONData, {
       tags: [{ name: 'Content-Type', value: 'application/json' }],
     })
     console.log(tx)
     return tx
+  }, [])
+  const makeArweave = async (data: Email) => {
+    try {
+      let tx = await uploadFile(data)
+      setURI(`http://arweave.net/${(tx as any).id}`)
+    } catch (err) {
+      console.log('error for initialize bundlr', err)
+      alert('something went wrong')
+    }
   }
 
   return (
@@ -21,10 +62,26 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div className='text-3xl font-bold underline'>
-          123
-        </div>
+      <main >
+        {
+          <div className='flex flex-col items-center'>
+            <h1>Many errors may occur, please pay attention to your metamask transaction status and console</h1>
+            <h2>Please first have a metamask, then change the net to goerli network</h2>
+            <h2>If you don't have funds on bundlr,please fund first, then click the store on arweave button, a static data will be sent to arweave network</h2>
+            <h3>Balance: {balance}</h3>
+            <button onClick={fundWallet}>Fund 0.1 goerli eth in Wallet</button>
+            <h1>Arweave Bundlr</h1>
+            <button onClick={() => makeArweave({
+              from: 'tim',
+              to: 'joe',
+              subject: 'hello',
+              body: 'hello world'
+            })}>Store on Arweave!</button>
+            {
+              URI && <a href={URI}>{URI}</a>
+            }
+          </div>
+        }
       </main>
     </>
   )

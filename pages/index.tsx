@@ -1,10 +1,12 @@
 import { useCallback, useContext, useState } from 'react'
 import Head from 'next/head'
 // import bundlr from '@utils/bundlr/bundlr-basics'
+import * as Bignumber from 'bignumber.js'
 import { MainContext } from '@utils/context'
 // import { BigNumber } from 'ethers'
 // import AuthConnectButton from '@modules/AuthConnectButton'
 import { Email } from '@pages/email/types/email.interface'
+import { BigNumber } from 'ethers'
 
 export default function Home() {
   const [URI, setURI] = useState('')
@@ -15,7 +17,8 @@ export default function Home() {
   }
   const fundWallet = useCallback(async () => {
     try {
-      const response = await bundlrInstance?.fund(100000000000000000)
+      let amount = parseIntToEther(0.01)
+      const response = await bundlrInstance?.fund(amount)
       console.log('Wallet funded: ', response)
       fetchBalance()
     } catch (err) {
@@ -24,32 +27,19 @@ export default function Home() {
     }
   }, [bundlrInstance, fetchBalance])
 
-  //TODO: TO BE REMOVED
-  // const parseInput = useCallback((input: number) => {
-  //   try {
-  //     const conv = BigNumber.from(input)
-  //     if (conv.lte(1)) {
-  //       console.log('error: value too small')
-  //       return
-  //     } else {
-  //       return conv
-  //     }
-  //   } catch (err) {
-  //     console.log('error: ', err)
-  //   }
+  function parseIntToEther(amount: number) {
+    const conv = new Bignumber.BigNumber(amount).multipliedBy(bundlrInstance!.currencyConfig.base[1])
+    return conv
+  }
 
-  // }, [])
-  const uploadFile = useCallback(
-    async (data: Email) => {
-      const JSONData = JSON.stringify(data)
-      const tx = await bundlrInstance?.upload(JSONData, {
-        tags: [{ name: 'Content-Type', value: 'application/json' }],
-      })
-      console.log(tx)
-      return tx
-    },
-    [bundlrInstance]
-  )
+  const uploadFile = useCallback(async (data: Email) => {
+    const JSONData = JSON.stringify(data)
+    const tx = await bundlrInstance?.upload(JSONData, {
+      tags: [{ name: 'Content-Type', value: 'application/json' }],
+    })
+    console.log(tx)
+    return tx
+  }, [bundlrInstance])
 
   const makeArweave = async (data: Email) => {
     try {

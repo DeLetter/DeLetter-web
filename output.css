@@ -526,6 +526,10 @@ video {
   display: flex;
 }
 
+.w-4\/5 {
+  width: 80%;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -538,9 +542,17 @@ video {
   border-width: 1px;
 }
 
+.border-2 {
+  border-width: 2px;
+}
+
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
+.text-center {
+  text-align: center;
 }
 
 /* :root {

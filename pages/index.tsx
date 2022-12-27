@@ -47,7 +47,7 @@ export default function Home() {
   const makeArweave = async (data: Email) => {
     try {
       let tx = await uploadFile(data)
-      setURI(`http://arweave.net/${(tx as any).id}`)
+      setURI(`${(tx as any).id}`)
     } catch (err) {
       console.log('error for initialize bundlr', err)
       alert('something went wrong')
@@ -67,18 +67,21 @@ export default function Home() {
           <div className='flex flex-col items-center'>
             <h1>Many errors may occur, please pay attention to your metamask transaction status and console</h1>
             <h2>Please first have a metamask, then change the net to goerli network</h2>
-            <h2>If you don't have funds on bundlr,please fund first, then click the store on arweave button, a static data will be sent to arweave network</h2>
+            <h2 className='w-4/5 text-center'>If you don't have funds on bundlr,please fund first, then click the store on arweave button, a static data will be sent to arweave network</h2>
             <h3>Balance: {balance}</h3>
-            <button onClick={fundWallet}>Fund 0.1 goerli eth in Wallet</button>
-            <h1>Arweave Bundlr</h1>
-            <button onClick={() => makeArweave({
-              from: 'tim',
-              to: 'joe',
-              subject: 'hello',
-              body: 'hello world'
-            })}>Store on Arweave!</button>
+            <button
+              className='border-2 border-black'
+              onClick={fundWallet}>Fund 0.1 goerli eth in Wallet</button>
+            <button
+              className='border-2 border-black'
+              onClick={() => makeArweave({
+                from: 'tim',
+                to: 'joe',
+                subject: 'hello',
+                body: 'hello world'
+              })}>Store on Arweave!</button>
             {
-              URI && <a href={URI}>{URI}</a>
+              URI && <span>id on bundlr devnet :{URI}</span>
             }
           </div>
         }

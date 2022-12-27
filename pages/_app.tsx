@@ -19,13 +19,14 @@ export default function App({ Component, pageProps }: AppProps) {
       await (window as any).ethereum.enable()
       const provider = new providers.Web3Provider((window as any).ethereum);
       await provider._ready()
-      const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: "https://ethereum-goerli-rpc.allthatnode.com"})
+      const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: "https://ethereum-goerli-rpc.allthatnode.com" })
       await bundlr.ready()
 
       setBundlrInstance(bundlr)
       bundlrRef.current = bundlr
+      fetchBalance()
     } catch (err) {
-      console.log('error for initialize bundlr', err)
+      console.log(err)
       alert('something went wrong')
     }
 
@@ -33,6 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const fetchBalance = useCallback(async () => {
     const bal = await bundlrRef.current?.getLoadedBalance()
+    console.log('bal: ', bal?.toString())
     console.log('bal: ', utils.formatEther(bal?.toString() ?? '0'))
     setBalance(utils.formatEther(bal?.toString() ?? '0'))
   }, [])

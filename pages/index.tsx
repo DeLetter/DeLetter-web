@@ -1,15 +1,19 @@
 import { useCallback, useContext, useState } from 'react'
 import Head from 'next/head'
 // import bundlr from '@utils/bundlr/bundlr-basics'
+import * as Bignumber from 'bignumber.js'
 import { MainContext } from '@utils/context'
-import { Email } from '@pages/email/types/email.interface'
+import { Email } from 'types/email.interface'
+import { BigNumber } from 'ethers'
 
 export default function Home() {
   const [URI, setURI] = useState('')
   const { bundlrInstance, balance, fetchBalance } = useContext(MainContext)
+
   const fundWallet = useCallback(async () => {
     try {
-      const response = await bundlrInstance?.fund(100000000000000000)
+      let amount = parseIntToEther(0.01)
+      const response = await bundlrInstance?.fund(amount)
       console.log('Wallet funded: ', response)
       fetchBalance()
     } catch (err) {
@@ -19,6 +23,11 @@ export default function Home() {
 
   }, [bundlrInstance, fetchBalance])
 
+  function parseIntToEther(amount: number) {
+    const conv = new Bignumber.BigNumber(amount).multipliedBy(bundlrInstance!.currencyConfig.base[1])
+    return conv
+  }
+
   const uploadFile = useCallback(async (data: Email) => {
     const JSONData = JSON.stringify(data)
     const tx = await bundlrInstance?.upload(JSONData, {
@@ -27,6 +36,7 @@ export default function Home() {
     console.log(tx)
     return tx
   }, [bundlrInstance])
+
   const makeArweave = async (data: Email) => {
     try {
       const tx = await uploadFile(data)

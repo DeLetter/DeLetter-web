@@ -1,11 +1,11 @@
-import Bundlr from '@bundlr-network/client';
+import Bundlr from '@bundlr-network/client'
 
-const jwk: string = JSON.parse(process.env.PRIVATE_KEY??'');
+const jwk: string = JSON.parse(process.env.PRIVATE_KEY ?? '')
 
-const devnet = "https://devnet.bundlr.network/"
+const devnet = 'https://devnet.bundlr.network/'
 
-const bundlr = new Bundlr(devnet, "arweave", jwk);
+const bundlr = new Bundlr(devnet, 'arweave', jwk)
 
-console.log(bundlr);
+console.log(bundlr)
 
-export default bundlr; // Export the bundlr instance
+export default bundlr // Export the bundlr instance

@@ -1,6 +1,6 @@
 // import '../styles/globals.css'
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { WebBundlr } from "@bundlr-network/client"
+import { WebBundlr } from '@bundlr-network/client'
 import { providers, utils } from 'ethers'
 import '../output.css'
 import type { AppProps } from 'next/app'
@@ -17,12 +17,17 @@ export default function App({ Component, pageProps }: AppProps) {
         alert('please install metamask')
       }
       await (window as any).ethereum.enable()
-      const provider = new providers.Web3Provider((window as any).ethereum);
+      const provider = new providers.Web3Provider((window as any).ethereum)
       await provider._ready()
 
       // console.log('rpc', process.env.NEXT_PUBLIC_PROVIDER_RPC)
-      
-      const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: process.env.PROVIDER_RPC})
+
+      const bundlr = new WebBundlr(
+        'https://devnet.bundlr.network',
+        'ethereum',
+        provider,
+        { providerUrl: process.env.PROVIDER_RPC }
+      )
       await bundlr.ready()
 
       setBundlrInstance(bundlr)
@@ -32,7 +37,6 @@ export default function App({ Component, pageProps }: AppProps) {
       console.log('error for initialize bundlr', err)
       alert('something went wrong')
     }
-
   }, [])
 
   const fetchBalance = useCallback(async () => {
@@ -42,17 +46,19 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [])
 
   useEffect(() => {
-    initialBundlr();
+    initialBundlr()
   }, [])
 
   return (
-    <MainContext.Provider value={{
-      initialBundlr,
-      bundlrInstance,
-      balance,
-      fetchBalance
-    }}>
+    <MainContext.Provider
+      value={{
+        initialBundlr,
+        bundlrInstance,
+        balance,
+        fetchBalance,
+      }}
+    >
       <Component {...pageProps} />
-    </ MainContext.Provider>
+    </MainContext.Provider>
   )
 }

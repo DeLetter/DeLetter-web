@@ -2,7 +2,7 @@ import { useCallback, useContext, useState } from 'react'
 import Head from 'next/head'
 // import bundlr from '@utils/bundlr/bundlr-basics'
 import { MainContext } from '@utils/context'
-import { Email } from '@pages/email/types/email.interface'
+import { Email } from 'types/email.interface'
 
 export default function Home() {
   const [URI, setURI] = useState('')

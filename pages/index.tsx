@@ -3,7 +3,7 @@ import Head from 'next/head'
 // import bundlr from '@utils/bundlr/bundlr-basics'
 import * as Bignumber from 'bignumber.js'
 import { MainContext } from '@utils/context'
-import { Email } from '@pages/email/types/email.interface'
+import { Email } from 'types/email.interface'
 import { BigNumber } from 'ethers'
 
 export default function Home() {

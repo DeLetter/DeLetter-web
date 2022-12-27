@@ -19,7 +19,9 @@ export default function App({ Component, pageProps }: AppProps) {
       await (window as any).ethereum.enable()
       const provider = new providers.Web3Provider((window as any).ethereum);
       await provider._ready()
-      console.log('rpc:',process.env.PROVIDER_RPC )
+
+      // console.log('rpc', process.env.NEXT_PUBLIC_PROVIDER_RPC)
+      
       const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: process.env.PROVIDER_RPC})
       await bundlr.ready()
 

@@ -9,9 +9,12 @@ import { Email } from '@pages/email/types/email.interface'
 export default function Home() {
   const [URI, setURI] = useState('')
   const { bundlrInstance, initialBundlr, balance, fetchBalance } = useContext(MainContext)
+  async function initBunder() {
+    await initialBundlr()
+  }
   const fundWallet = useCallback(async () => {
     try {
-      let response = await bundlrInstance?.fund(100000000000000000)
+      const response = await bundlrInstance?.fund(100000000000000000)
       console.log('Wallet funded: ', response)
       fetchBalance()
     } catch (err) {
@@ -44,10 +47,12 @@ export default function Home() {
     console.log(tx)
     return tx
   }, [])
+  
   const makeArweave = async (data: Email) => {
     try {
-      let tx = await uploadFile(data)
-      setURI(`${(tx as any).id}`)
+      const tx = await uploadFile(data)
+      console.log('tx: ', tx)
+      // setURI(`${(tx as any).id}`)
     } catch (err) {
       console.log('error for initialize bundlr', err)
       alert('something went wrong')
@@ -63,7 +68,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main >
-        {
+        {!balance && <button onClick={initBunder}>Initialize</button>}
+        {balance &&
           <div className='flex flex-col items-center'>
             <h1>Many errors may occur, please pay attention to your metamask transaction status and console</h1>
             <h2>Please first have a metamask, then change the net to goerli network</h2>

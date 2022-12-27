@@ -1,8 +1,8 @@
-// import '../styles/globals.css'
+import '../styles/globals.css'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { WebBundlr } from "@bundlr-network/client"
 import { providers, utils } from 'ethers'
-import '../output.css'
+// import '../output.css'
 import type { AppProps } from 'next/app'
 import { MainContext } from '@utils/context'
 
@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
       await (window as any).ethereum.enable()
       const provider = new providers.Web3Provider((window as any).ethereum);
       await provider._ready()
-      const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: process.env.PROVIDER_RPC })
+      const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: "https://ethereum-goerli-rpc.allthatnode.com"})
       await bundlr.ready()
 
       setBundlrInstance(bundlr)

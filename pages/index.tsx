@@ -5,7 +5,7 @@ import * as Bignumber from 'bignumber.js'
 import { MainContext } from '@utils/context'
 // import { BigNumber } from 'ethers'
 // import AuthConnectButton from '@modules/AuthConnectButton'
-import { Email } from '@pages/email/types/email.interface'
+import { Email } from 'types/email.interface'
 import { BigNumber } from 'ethers'
 
 export default function Home() {

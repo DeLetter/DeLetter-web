@@ -9,8 +9,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main >
-        123
+      <main>
+        <div className='text-3xl font-bold underline'>
+          123
+        </div>
       </main>
     </>
   )

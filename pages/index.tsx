@@ -1,8 +1,9 @@
 import { useCallback, useContext, useState } from 'react'
 import Head from 'next/head'
 // import bundlr from '@utils/bundlr/bundlr-basics'
-import * as Bignumber from 'bignumber.js'
-import { MainContext } from '@utils/context'
+// import * as Bignumber from 'bignumber.js'
+// import { MainContext } from '@utils/context'
+import { useBundlr } from '@hooks/MainContext'
 // import { BigNumber } from 'ethers'
 // import AuthConnectButton from '@modules/AuthConnectButton'
 import { Email } from 'types/email.interface'
@@ -10,6 +11,8 @@ import { BigNumber } from 'ethers'
 
 export default function Home() {
   const [URI, setURI] = useState('')
+  const { bundlrInstance, balance, fetchBalance } = useBundlr()
+
   const { bundlrInstance, initialBundlr, balance, fetchBalance } =
     useContext(MainContext)
   async function initBunder() {
@@ -17,8 +20,9 @@ export default function Home() {
   }
   const fundWallet = useCallback(async () => {
     try {
-      let amount = parseIntToEther(0.01)
-      const response = await bundlrInstance?.fund(amount)
+      let amount = parseIntToEther(1)
+      amount = amount.div(10)
+      const response = await bundlrInstance?.fund(amount.toString())
       console.log('Wallet funded: ', response)
       fetchBalance()
     } catch (err) {
@@ -28,7 +32,7 @@ export default function Home() {
   }, [bundlrInstance, fetchBalance])
 
   function parseIntToEther(amount: number) {
-    const conv = new Bignumber.BigNumber(amount).multipliedBy(bundlrInstance!.currencyConfig.base[1])
+    const conv = (BigNumber.from(amount)).mul(bundlrInstance!.currencyConfig.base[1].toString())
     return conv
   }
 

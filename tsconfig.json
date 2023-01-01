@@ -20,7 +20,7 @@
       "@modules/*": ["./modules/*"],
       "@pages/*": ["./pages/*"],
       // "@store/*": ["./store/*"],
-      // "@hooks/*": ["./hooks/*"],
+      "@hooks/*": ["./hooks/*"],
       "@components/*": ["./components/*"],
       // "@service/*": ["./service/*"],
       "@contracts/*": ["./contracts/*"],

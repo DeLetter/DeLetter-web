@@ -16,12 +16,12 @@ const BundlrContextDefault = {
   balance: '',
   fetchBalance: () => { }
 }
-export const MainContext = createContext<IBundlrContext>(BundlrContextDefault)
+export const BundlrContext = createContext<IBundlrContext>(BundlrContextDefault)
 
-interface IMainContextProviderProps {
+interface IBundlrContextProviderProps {
   children: ReactNode
 }
-const BundlrContextProvider: React.FC<IMainContextProviderProps> = ({ children }) => {
+const BundlrContextProvider: React.FC<IBundlrContextProviderProps> = ({ children }) => {
   const [bundlrInstance, setBundlrInstance] = useState<WebBundlr | null>()
   const [balance, setBalance] = useState<string>('')
   const bundlrRef = useRef<WebBundlr | null>()
@@ -58,20 +58,20 @@ const BundlrContextProvider: React.FC<IMainContextProviderProps> = ({ children }
   }, [])
 
   return (
-    <MainContext.Provider value={{
+    <BundlrContext.Provider value={{
       initialBundlr,
       bundlrInstance,
       balance,
       fetchBalance
     }}>
       {children}
-    </ MainContext.Provider>
+    </ BundlrContext.Provider>
   )
 }
 
 export default BundlrContextProvider;
 
 export const useBundlr = () => {
-  const { bundlrInstance, balance, fetchBalance } = useContext(MainContext)
+  const { bundlrInstance, balance, fetchBalance } = useContext(BundlrContext)
   return { bundlrInstance, balance, fetchBalance }
 }

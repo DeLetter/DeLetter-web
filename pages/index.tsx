@@ -1,14 +1,12 @@
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useState } from 'react'
 import Head from 'next/head'
-// import bundlr from '@utils/bundlr/bundlr-basics'
-// import * as Bignumber from 'bignumber.js'
-// import { MainContext } from '@utils/context'
-import { useBundlr } from '@hooks/BundlrContext'
-import { Email } from 'types/email.interface'
 import { BigNumber } from 'ethers'
+import { useBundlr } from '@hooks/BundlrContext'
+import WriteArButton from '@modules/WriteArButton'
+import ReadArButton from '@modules/ReadArButton'
+
 
 export default function Home() {
-  const [URI, setURI] = useState('')
   const { bundlrInstance, balance, fetchBalance } = useBundlr()
 
   const { bundlrInstance, initialBundlr, balance, fetchBalance } =
@@ -34,27 +32,6 @@ export default function Home() {
     return conv
   }
 
-  const uploadFile = useCallback(async (data: Email) => {
-    const JSONData = JSON.stringify(data)
-    const tx = await bundlrInstance?.upload(JSONData, {
-      tags: [{ name: 'Content-Type', value: 'application/json' }],
-    })
-    console.log(tx)
-    return tx
-  }, [bundlrInstance])
-
-  const makeArweave = async (data: Email) => {
-    try {
-      const tx = await uploadFile(data)
-      console.log('tx: ', tx)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setURI(`${(tx as any).id}`)
-    } catch (err) {
-      console.log('error for initialize bundlr', err)
-      alert('something went wrong')
-    }
-  }
-
   return (
     <>
       <Head>
@@ -64,42 +41,27 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {!balance && <button onClick={initBunder}>Initialize</button>}
-        {balance && (
-          <div className="flex flex-col items-center">
-            <h1>
-              Many errors may occur, please pay attention to your metamask
-              transaction status and console
-            </h1>
-            <h2>
-              Please first have a metamask, then change the net to goerli
-              network
-            </h2>
-            <h2 className="w-4/5 text-center">
-              If you don&apos;t have funds on bundlr,please fund first, then
-              click the store on arweave button, a static data will be sent to
-              arweave network
-            </h2>
-            <h3>Balance: {balance}</h3>
-            <button className="border-2 border-black" onClick={fundWallet}>
-              Fund 0.1 goerli eth in Wallet
-            </button>
-            <button
-              className="border-2 border-black"
-              onClick={() =>
-                makeArweave({
-                  from: 'tim',
-                  to: 'joe',
-                  subject: 'hello',
-                  body: 'hello world',
-                })
-              }
-            >
-              Store on Arweave!
-            </button>
-            {URI && <span>id on bundlr devnet :{URI}</span>}
-          </div>
-        )}
+        <div className="flex flex-col items-center">
+          <h1>
+            Many errors may occur, please pay attention to your metamask
+            transaction status and console
+          </h1>
+          <h2>
+            Please first have a metamask, then change the net to goerli
+            network
+          </h2>
+          <h2 className="w-4/5 text-center">
+            If you don&apos;t have funds on bundlr,please fund first, then
+            click the store on arweave button, a static data will be sent to
+            arweave network
+          </h2>
+          <h3>Balance: {balance}</h3>
+          <button className="border-2 border-black" onClick={fundWallet}>
+            Fund 0.1 goerli eth in Wallet
+          </button>
+          <WriteArButton />
+          <ReadArButton />
+        </div>
       </main>
     </>
   )

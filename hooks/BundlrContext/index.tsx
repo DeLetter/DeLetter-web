@@ -36,7 +36,6 @@ const BundlrContextProvider: React.FC<IBundlrContextProviderProps> = ({ children
       await provider._ready()
       const bundlr = new WebBundlr("https://devnet.bundlr.network", "ethereum", provider, { providerUrl: "https://ethereum-goerli-rpc.allthatnode.com" })
       await bundlr.ready()
-
       setBundlrInstance(bundlr)
       bundlrRef.current = bundlr
       fetchBalance()

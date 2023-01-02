@@ -3,7 +3,7 @@ import abiJSON from './abi/base.json'
 import { BASE_CONTRACT_ADDRESS } from '../constants'
 
 //TODO: Abstract
-export const connectContract = () => {
+export const connectContract = async () => {
   const contractABI = abiJSON
   let baseContract: ethers.Contract
   try {
@@ -18,7 +18,7 @@ export const connectContract = () => {
       contractABI,
       signer
     ) // instantiating new connection to the contract
-    return baseContract
+    return { baseContract, signer }
   } catch (error) {
     console.log('ERROR:', error)
     throw new Error('sorry something went wrong')

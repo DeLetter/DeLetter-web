@@ -1,14 +1,12 @@
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useState } from 'react'
 import Head from 'next/head'
-// import bundlr from '@utils/bundlr/bundlr-basics'
-// import * as Bignumber from 'bignumber.js'
-// import { MainContext } from '@utils/context'
-import { useBundlr } from '@hooks/BundlrContext'
-import { Email } from 'types/email.interface'
 import { BigNumber } from 'ethers'
+import { useBundlr } from '@hooks/BundlrContext'
+import WriteArButton from '@modules/WriteArButton'
+import ReadArButton from '@modules/ReadArButton'
+
 
 export default function Home() {
-  const [URI, setURI] = useState('')
   const { bundlrInstance, balance, fetchBalance } = useBundlr()
 
   const fundWallet = useCallback(async () => {
@@ -28,25 +26,6 @@ export default function Home() {
   function parseIntToEther(amount: number) {
     const conv = (BigNumber.from(amount)).mul(bundlrInstance!.currencyConfig.base[1].toString())
     return conv
-  }
-
-  const uploadFile = useCallback(async (data: Email) => {
-    const JSONData = JSON.stringify(data)
-    const tx = await bundlrInstance?.upload(JSONData, {
-      tags: [{ name: 'Content-Type', value: 'application/json' }],
-    })
-    console.log(tx)
-    return tx
-  }, [bundlrInstance])
-
-  const makeArweave = async (data: Email) => {
-    try {
-      const tx = await uploadFile(data)
-      setURI(`${(tx as any).id}`)
-    } catch (err) {
-      console.log('error for initialize bundlr', err)
-      alert('something went wrong')
-    }
   }
 
   return (
@@ -76,20 +55,8 @@ export default function Home() {
           <button className="border-2 border-black" onClick={fundWallet}>
             Fund 0.1 goerli eth in Wallet
           </button>
-          <button
-            className="border-2 border-black"
-            onClick={() =>
-              makeArweave({
-                from: 'tim',
-                to: 'joe',
-                subject: 'hello',
-                body: 'hello world',
-              })
-            }
-          >
-            Store on Arweave!
-          </button>
-          {URI && <span>id on bundlr devnet :{URI}</span>}
+          <WriteArButton />
+          <ReadArButton />
         </div>
       </main>
     </>

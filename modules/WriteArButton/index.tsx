@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from 'react'
-import { ethers } from 'ethers'
+import { useForm } from "react-hook-form";
 import { useBundlr } from '@hooks/BundlrContext'
 import { Email } from 'types/email.interface'
 import { connectContract } from '@utils/contracts'
@@ -7,13 +7,8 @@ import { UploadResponse } from '@bundlr-network/client/build/common/types'
 
 //Store on Arweave and write related data on blockchain
 const WriteArButton: React.FC = () => {
-  // const [URI, setURI] = useState('')
-  const [formData, setFormData] = useState<Email>({
-    from: '',
-    to: '',
-    subject: '',
-    body: '',
-  })
+  const { register, handleSubmit: withForm, formState: { errors } } = useForm()
+
   const { bundlrInstance } = useBundlr()
 
   const uploadFile = useCallback(
@@ -51,68 +46,37 @@ const WriteArButton: React.FC = () => {
     [bundlrInstance]
   )
 
-  const makeArweave = async (data: Email) => {
+  const handleSubmit = useCallback(withForm(async (data) => {
     try {
-      const tx = await uploadFile(data)
+      const tx = await uploadFile(data.lists)
       console.log(tx)
       const ftx = await writeArweaveAdd(tx)
       console.log('ftx', ftx)
       alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
-      // setURI(`${(tx as any).id}`)
     } catch (err) {
-      // console.log('error for initialize bundlr', err)
       alert('something went wrong')
     }
-  }
+  }), [bundlrInstance])
+  // TODO: add error notification
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <h2>Store on Arweave</h2>
       <div className="flex flex-col">
-        <label htmlFor="from">From</label>
+        <label htmlFor="lists">Email lists</label>
         <input
           type="text"
-          id="from"
+          id="lists"
+          {...register("lists", { required: true })}
           className="border-2"
-          onChange={(e) => setFormData({ ...formData, from: e.target.value })}
         />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="to">To</label>
-        <input
-          type="text"
-          id="to"
-          className="border-2"
-          onChange={(e) => setFormData({ ...formData, to: e.target.value })}
-        />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="subject">Subject</label>
-        <input
-          type="text"
-          id="subject"
-          className="border-2"
-          onChange={(e) =>
-            setFormData({ ...formData, subject: e.target.value })
-          }
-        />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="body">Body</label>
-        <input
-          type="text"
-          id="body"
-          className="border-2"
-          onChange={(e) => setFormData({ ...formData, body: e.target.value })}
-        />
+        {errors.lists && <div className='text-red-500'>This field is required</div>}
       </div>
       <button
         className="mt-4 border-2 p-2 border-black"
-        onClick={() => makeArweave(formData)}
       >
         Store on Arweave!
       </button>
-      {/* {URI && <span>id on bundlr devnet :{URI}</span>} */}
-    </>
+    </form>
   )
 }
 

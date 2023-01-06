@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import Head from 'next/head'
 import { BigNumber } from 'ethers'
 import { useBundlr } from '@hooks/BundlrContext'

@@ -1,13 +1,15 @@
 import { useCallback } from 'react'
 import Head from 'next/head'
 import { BigNumber } from 'ethers'
-import { useBundlr } from '@hooks/BundlrContext'
+import { bundlrStore } from '@store/Bundlr'
 import WriteArButton from '@modules/WriteArButton'
 import ReadArButton from '@modules/ReadArButton'
 
 
 export default function Home() {
-  const { bundlrInstance, balance, fetchBalance } = useBundlr()
+  const bundlrInstance = bundlrStore((state) => state.bundlrInstance)
+  const balance = bundlrStore((state) => state.balance)
+  const fetchBalance = bundlrStore((state) => state.fetchBalance)
 
   const { bundlrInstance, initialBundlr, balance, fetchBalance } =
     useContext(MainContext)
@@ -59,8 +61,8 @@ export default function Home() {
           <button className="border-2 border-black" onClick={fundWallet}>
             Fund 0.1 goerli eth in Wallet
           </button>
-          <WriteArButton />
-          <ReadArButton />
+          {/* <WriteArButton />
+          <ReadArButton /> */}
         </div>
       </main>
     </>

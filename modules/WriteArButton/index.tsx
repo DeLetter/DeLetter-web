@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
 import { useForm } from "react-hook-form";
-import { useBundlr } from '@hooks/BundlrContext'
+import { bundlrStore } from '@store/Bundlr';
 import { Email } from 'types/email.interface'
 import { connectContract } from '@utils/contracts'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
@@ -9,7 +9,7 @@ import { UploadResponse } from '@bundlr-network/client/build/common/types'
 const WriteArButton: React.FC = () => {
   const { register, handleSubmit: withForm, formState: { errors } } = useForm()
 
-  const { bundlrInstance } = useBundlr()
+  const bundlrInstance = bundlrStore.getState().bundlrInstance;
 
   const uploadFile = useCallback(
     async (data: Email) => {

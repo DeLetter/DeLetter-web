@@ -19,7 +19,7 @@
       "@utils/*": ["./utils/*"],
       "@modules/*": ["./modules/*"],
       "@pages/*": ["./pages/*"],
-      // "@store/*": ["./store/*"],
+      "@store/*": ["./store/*"],
       "@hooks/*": ["./hooks/*"],
       "@components/*": ["./components/*"],
       // "@service/*": ["./service/*"],

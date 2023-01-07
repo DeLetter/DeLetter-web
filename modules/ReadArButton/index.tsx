@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
-import { useBundlr } from '@hooks/BundlrContext'
+import { bundlrStore } from '@store/Bundlr'
 import { connectContract } from '@utils/contracts'
 
 const ReadArButton: React.FC = () => {
   const [URI, setURI] = useState('')
-  const { bundlrInstance } = useBundlr();
+  const  bundlrInstance  = bundlrStore.getState().bundlrInstance;
 
   const getAddress = useCallback(async () => {
     if (!bundlrInstance) { console.log('bundlrInstance is undefined'); return; };

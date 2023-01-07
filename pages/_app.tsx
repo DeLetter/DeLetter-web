@@ -1,12 +1,22 @@
+import { useEffect } from 'react'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import BundlrContextProvider from '@hooks/BundlrContext'
+import { bundlrStore } from '@store/Bundlr'
 
 export default function App({ Component, pageProps }: AppProps) {
 
+  const initialize = async () => {
+    const initialBundlr = bundlrStore.getState().initialBundlr
+    await initialBundlr();
+    const fetchBalance = bundlrStore.getState().fetchBalance
+    await fetchBalance()
+  }
+
+  useEffect(() => {
+    initialize()
+  }, [])
+
   return (
-    <BundlrContextProvider>
-      <Component {...pageProps} />
-    </BundlrContextProvider>
+    <Component {...pageProps} />
   )
 }

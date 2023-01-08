@@ -61,8 +61,8 @@ export default function Home() {
           <button className="border-2 border-black" onClick={fundWallet}>
             Fund 0.1 goerli eth in Wallet
           </button>
-          {/* <WriteArButton />
-          <ReadArButton /> */}
+          <WriteArButton />
+          <ReadArButton />
         </div>
       </main>
     </>

@@ -1,18 +1,17 @@
-import { useCallback, useContext, useState } from 'react'
-import { useForm } from "react-hook-form";
+import { useCallback } from 'react'
 import { bundlrStore } from '@store/Bundlr';
-import { Email } from 'types/email.interface'
+import { emailDataStore } from '@store/EmailData';
 import { connectContract } from '@utils/contracts'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 
 //Store on Arweave and write related data on blockchain
-const WriteArButton: React.FC = () => {
-  const { register, handleSubmit: withForm, formState: { errors } } = useForm()
+const WriteAr: React.FC = () => {
+  const encryptedData = emailDataStore.getState().encryptedData
 
   const bundlrInstance = bundlrStore.getState().bundlrInstance;
 
   const uploadFile = useCallback(
-    async (data: Email) => {
+    async (data: string) => {
       try {
         const JSONData = JSON.stringify(data)
         const tx = await bundlrInstance?.upload(JSONData, {
@@ -46,9 +45,9 @@ const WriteArButton: React.FC = () => {
     [bundlrInstance]
   )
 
-  const handleSubmit = useCallback(withForm(async (data) => {
+  const handleSubmit = useCallback((async (encryptedData: string) => {
     try {
-      const tx = await uploadFile(data.lists)
+      const tx = await uploadFile(encryptedData)
       console.log(tx)
       const ftx = await writeArweaveAdd(tx)
       console.log('ftx', ftx)
@@ -56,28 +55,19 @@ const WriteArButton: React.FC = () => {
     } catch (err) {
       alert('something went wrong')
     }
-  }), [bundlrInstance])
+  }), [bundlrInstance, encryptedData])
   // TODO: add error notification
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Store on Arweave</h2>
-      <div className="flex flex-col">
-        <label htmlFor="lists">Email lists</label>
-        <input
-          type="text"
-          id="lists"
-          {...register("lists", { required: true })}
-          className="border-2"
-        />
-        {errors.lists && <div className='text-red-500'>This field is required</div>}
-      </div>
+    <div >
+      <h2>Encrypt Your Email lists !</h2>
       <button
+        onClick={() => handleSubmit(encryptedData)}
         className="mt-4 border-2 p-2 border-black"
       >
-        Store on Arweave!
+        Store the encrypted data on Arweave !
       </button>
-    </form>
+    </div>
   )
 }
 
-export default WriteArButton
+export default WriteAr

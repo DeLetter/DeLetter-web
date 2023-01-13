@@ -4,8 +4,7 @@ import { BigNumber } from 'ethers'
 import { bundlrStore } from '@store/Bundlr'
 import DataFrom from '@modules/DataForm'
 import WriteAr from '@modules/WriteAr'
-import ReadArButton from '@modules/ReadArButton'
-
+import LoadData from '@modules/LoadData'
 
 export default function Home() {
   const bundlrInstance = bundlrStore((state) => state.bundlrInstance)
@@ -64,7 +63,7 @@ export default function Home() {
           </button>
           <DataFrom />
           <WriteAr />
-          <ReadArButton />
+          <LoadData />
         </div>
       </main>
     </>

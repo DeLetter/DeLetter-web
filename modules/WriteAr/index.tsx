@@ -58,15 +58,12 @@ const WriteAr: React.FC = () => {
   }), [bundlrInstance, encryptedData])
   // TODO: add error notification
   return (
-    <div >
-      <h2>Encrypt Your Email lists !</h2>
       <button
         onClick={() => handleSubmit(encryptedData)}
         className="mt-4 border-2 p-2 border-black"
       >
         Store the encrypted data on Arweave !
       </button>
-    </div>
   )
 }
 

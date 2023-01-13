@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { bundlrStore } from '@store/Bundlr';
 import { emailDataStore } from '@store/EmailData';
@@ -13,51 +13,51 @@ const WriteArButton: React.FC = () => {
 
   const bundlrInstance = bundlrStore.getState().bundlrInstance;
 
-  const uploadFile = useCallback(
-    async (data: Email) => {
-      try {
-        const JSONData = JSON.stringify(data)
-        const tx = await bundlrInstance?.upload(JSONData, {
-          tags: [{ name: 'Content-Type', value: 'application/json' }],
-        })
-        return tx
-      } catch (err) {
-        console.log('error for uploadFile', err)
-        throw new Error('error for uploadFile')
-      }
-    },
-    [bundlrInstance]
-  )
+  // const uploadFile = useCallback(
+  //   async (data: Email) => {
+  //     try {
+  //       const JSONData = JSON.stringify(data)
+  //       const tx = await bundlrInstance?.upload(JSONData, {
+  //         tags: [{ name: 'Content-Type', value: 'application/json' }],
+  //       })
+  //       return tx
+  //     } catch (err) {
+  //       console.log('error for uploadFile', err)
+  //       throw new Error('error for uploadFile')
+  //     }
+  //   },
+  //   [bundlrInstance]
+  // )
 
-  const writeArweaveAdd = useCallback(
-    async (bundlrTx: UploadResponse | undefined) => {
-      if (!bundlrTx) {
-        console.log('bundlrTx is undefined')
-        return
-      }
-      try {
-        const { id } = bundlrTx
-        const { baseContract } = await connectContract()
-        const tx = await baseContract.functions.setArweaveAddress(id)
-        return tx
-      } catch (err) {
-        console.log('SetArweaveAddress', err)
-        throw new Error('SetArweaveAddress')
-      }
-    },
-    [bundlrInstance]
-  )
+  // const writeArweaveAdd = useCallback(
+  //   async (bundlrTx: UploadResponse | undefined) => {
+  //     if (!bundlrTx) {
+  //       console.log('bundlrTx is undefined')
+  //       return
+  //     }
+  //     try {
+  //       const { id } = bundlrTx
+  //       const { baseContract } = await connectContract()
+  //       const tx = await baseContract.functions.setArweaveAddress(id)
+  //       return tx
+  //     } catch (err) {
+  //       console.log('SetArweaveAddress', err)
+  //       throw new Error('SetArweaveAddress')
+  //     }
+  //   },
+  //   [bundlrInstance]
+  // )
 
   const handleSubmit = useCallback(withForm(async (data) => {
     try {
       const { lists, password } = data;
       const encrypted = Encryption.encrypt(lists, password);
       emailDataStore.setState({ encryptedData: encrypted })
-      const tx = await uploadFile(data.lists)
-      console.log(tx)
-      const ftx = await writeArweaveAdd(tx)
-      console.log('ftx', ftx)
-      alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
+      // const tx = await uploadFile(data.lists)
+      // console.log(tx)
+      // const ftx = await writeArweaveAdd(tx)
+      // console.log('ftx', ftx)
+      // alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
     } catch (err) {
       alert('something went wrong')
     }

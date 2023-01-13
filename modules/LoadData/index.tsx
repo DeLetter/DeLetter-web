@@ -40,6 +40,7 @@ const LoadData: React.FC = () => {
         </button>
       </form>
       {loadedData && <div>{loadedData}</div>}
+      <a href={`mailto:${loadedData}`} />
     </>
   )
 }

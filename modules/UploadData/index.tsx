@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { bundlrStore } from '@store/Bundlr';
-import { emailDataStore } from '@store/EmailData';
-import { Email } from 'types/email.interface'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
@@ -95,7 +93,7 @@ const UploadData: React.FC = () => {
         Now it’s time to encrypt these data and store in Arweave!
       </button>
       <h2>Hash : </h2>
-      {hash && <div className='text-green-500'>{hash}</div>}
+      {hash && <p className='text-green-500 break-all'>{hash}</p>}
     </form>
   )
 }

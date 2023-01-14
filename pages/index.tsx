@@ -2,8 +2,7 @@ import { useCallback } from 'react'
 import Head from 'next/head'
 import { BigNumber } from 'ethers'
 import { bundlrStore } from '@store/Bundlr'
-import DataFrom from '@modules/DataForm'
-import WriteAr from '@modules/WriteAr'
+import UploadData from '@modules/UploadData'
 import LoadData from '@modules/LoadData'
 
 export default function Home() {
@@ -57,8 +56,7 @@ export default function Home() {
           <button className="border-2 border-black" onClick={fundWallet}>
             Fund 0.1 goerli eth in Wallet
           </button>
-          <DataFrom />
-          <WriteAr />
+          <UploadData />
           <LoadData />
         </div>
       </main>

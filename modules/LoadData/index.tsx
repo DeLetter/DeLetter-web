@@ -14,18 +14,15 @@ const LoadData: React.FC = () => {
     const arId = await getAddress()
     if (!arId) { console.log('arId is undefined'); return; }
     const res = await fetch(`https://arweave.net/${arId}`)
-    // if (res.status !== 200) return console.log('error for fetch', res)
-    // const arweaveRes = await fetch(`${res.url}`)
-    // const test = await arweaveRes.json()
     const arweaveRes = await res.json()
     const decryptedData = await Encryption.decrypt(arweaveRes, enteredpassword)
     setLoadedData(JSON.stringify(decryptedData));
   }), [bundlrInstance])
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col">
+    <div className='flex flex-col justify-between'>
+      <form onSubmit={handleSubmit} className='mb-[19px]'>
+        <div className="mb-[14px] flex flex-col">
           <label htmlFor="password">Enter your password: </label>
           <input
             type="password"
@@ -35,13 +32,13 @@ const LoadData: React.FC = () => {
           />
           {errors.enteredpassword && <div className='text-red-500'>This field is required</div>}
         </div>
-        <button className="mt-4 border-2 border-black" >
+        <button className="w-full border-2 border-black" >
           Load data from arweave
         </button>
       </form>
-      {loadedData && <div>{loadedData}</div>}
-      <a href={`mailto:${loadedData}`} >Send emails</a>
-    </>
+      <div className='flex-auto border-[2px] border-black border-dashed'>{loadedData}</div>
+      <a className='mt-[19px] flex justify-center items-center w-full border-2 border-black' href={`mailto:${loadedData}`} >Send emails</a>
+    </div>
   )
 }
 

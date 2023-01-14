@@ -67,18 +67,18 @@ const UploadData: React.FC = () => {
   // TODO: add error notification
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Encrypt Your Email lists !</h2>
-      <div className="flex flex-col">
-        <label htmlFor="lists">Email lists</label>
-        <input
-          type="text"
+      <div className="mb-[14px] flex flex-col">
+        <label htmlFor="lists">Please enter you email list(Please, separate each item with semicolon)</label>
+        <textarea
+          placeholder='ricy@deletter.com; timtimtim@deletter.com;'
+          rows={4}
           id="lists"
           {...register("lists", { required: true })}
           className="border-2"
         />
         {errors.lists && <div className='text-red-500'>This field is required</div>}
       </div>
-      <div className="flex flex-col">
+      <div className="mb-[14px] flex flex-col">
         <label htmlFor="password">Set your password: </label>
         <input
           type="password"
@@ -89,7 +89,7 @@ const UploadData: React.FC = () => {
         {errors.password && <div className='text-red-500'>This field is required</div>}
       </div>
       <button
-        className="mt-4 border-2 p-2 border-black"
+        className="mb-[14px] border-2 p-2 border-black"
       >
         Already entered all the email data and is quite aware of the password.
         Now it’s time to encrypt these data and store in Arweave!

@@ -47,19 +47,12 @@ const LoadData: React.FC = () => {
             <div className="text-red-500">This field is required</div>
           )}
         </div>
-        <button className="w-full my-[8px] border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
+        <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300" >
           Load data from arweave
         </button>
       </form>
-      <div className="flex-auto border-[2px] border-black border-dashed">
-        {loadedData}
-      </div>
-      <a
-        className="mt-[19px] flex justify-center items-center w-full border-2 border-black rounded-md hover:bg-black hover:text-white transition duration-300"
-        href={`mailto:${loadedData}`}
-      >
-        Send emails
-      </a>
+      <div className='flex-auto border-[2px] border-black border-dashed'>{loadedData}</div>
+      <a className='mt-[19px] w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300' href={`mailto:${loadedData}`} >Send emails</a>
     </div>
   )
 }

@@ -34,8 +34,21 @@ export default function Home() {
       
       <main className="flex flex-col items-center">
         <div className="w-4/5">
-          <div className='flex justify-center items-center h-[100px] font-semibold text-[16px]'>
-            DeLetter's still developing. Many errors may occur, please pay attention to your metamask transaction status and console
+        <div className="m-3 w-full flex justify-center bg-grey-100">
+            <div className="font-bold text-[16px] bg-gray-200 p-5 text-red-500">
+              DeLetter's still developing. Many errors may occur, please pay
+              attention to your metamask transaction status and console!
+              <div className="text-center">
+                For any bug please use this form: <br />
+                <a
+                  href="https://forms.gle/qPwTjT4RLDqoGMJ49"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Bug Reporting
+                </a>
+              </div>
+            </div>
           </div>
           <ul>
             <li>Please first have a metamask, then change the net to goerli network</li>
@@ -47,7 +60,7 @@ export default function Home() {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-[10px] mt-[24px]'>
             <div>
               <h3 >Balance: {balance}</h3>
-              <button className="mb-[24px] border-2 border-black" onClick={fundWallet}>
+              <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300" onClick={fundWallet}>
                 Fund 0.1 goerli eth in Wallet
               </button>
               <UploadData />

@@ -1,9 +1,9 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { WebBundlr } from '@bundlr-network/client'
 import { providers, utils } from 'ethers'
 
 export interface BundlrStore {
-  initialBundlr: () => Promise<void> | void,
+  initialBundlr: () => Promise<void> | void
   bundlrInstance: WebBundlr | undefined | null
   balance: string
   fetchBalance: () => Promise<void> | void

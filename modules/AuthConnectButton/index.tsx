@@ -1,5 +1,10 @@
-import { providers } from 'ethers';
-import React, { useState, type PropsWithChildren, useCallback, useEffect } from 'react';// const ConnectButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ ...props }) => {
+import { providers } from 'ethers'
+import React, {
+  useState,
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+} from 'react' // const ConnectButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ ...props }) => {
 //   const connectWallet = useCallback(async () => {
 //     if (!(window as any).ethereum) {
 //       alert('please install metamask')

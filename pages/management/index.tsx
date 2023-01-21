@@ -36,7 +36,7 @@ export default function Home() {
         <div className="w-4/5">
           <div className="m-3 w-full flex justify-center bg-grey-100">
             <div className="font-bold text-[16px] bg-gray-200 p-5 text-red-500">
-              DeLetter's still developing. Many errors may occur, please pay
+              DeLetter&apos;s still developing. Many errors may occur, please pay
               attention to your metamask transaction status and console!
               <div className="text-center">
                 For any bug please use this form: <br />
@@ -55,10 +55,10 @@ export default function Home() {
               Please first have a metamask, then change the net to goerli
               network
             </li>
-            <li>If you don't have funds on bundlr,please fund first</li>
+            <li>If you don&apos;t have funds on bundlr,please fund first</li>
             <li>
-              Enter your contacts’ emails and then enter a password used to
-              encrypt your contacts’ emails data
+              Enter your contacts&apos; emails and then enter a password used to
+              encrypt your contacts&apos; emails data
             </li>
             <li>
               When retrieving your data, please enter your password used for

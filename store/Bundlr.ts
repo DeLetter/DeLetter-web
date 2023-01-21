@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import create from 'zustand'
 import { WebBundlr } from '@bundlr-network/client'
 import { providers, utils } from 'ethers'
 
@@ -14,11 +14,12 @@ export const bundlrStore = create<BundlrStore>((set, get) => ({
   balance: '',
   initialBundlr: async () => {
     try {
-      if (!(window as any).ethereum) {
+      if (!window?.ethereum) {
         alert('please install metamask')
+        return
       }
-      await (window as any).ethereum.enable()
-      const provider = new providers.Web3Provider((window as any).ethereum)
+      await window.ethereum.request!({ method: 'eth_requestAccounts' });
+      const provider = new providers.Web3Provider(window.ethereum)
       await provider._ready()
       const bundlr = new WebBundlr(
         'https://devnet.bundlr.network',

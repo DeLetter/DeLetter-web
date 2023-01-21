@@ -1,14 +1,13 @@
 import { useCallback } from 'react'
-import Head from 'next/head'
 import { BigNumber } from 'ethers'
-import { bundlrStore } from '@store/Bundlr'
+import { useBundlrInstance, useBundlrBalance, useFetchBundlrBalance } from '@store/Bundlr'
 import UploadData from '@modules/UploadData'
 import LoadData from '@modules/LoadData'
 
 export default function Home() {
-  const bundlrInstance = bundlrStore((state) => state.bundlrInstance)
-  const balance = bundlrStore((state) => state.balance)
-  const fetchBalance = bundlrStore((state) => state.fetchBalance)
+  const bundlrInstance = useBundlrInstance()
+  const balance = useBundlrBalance()
+  const fetchBalance = useFetchBundlrBalance()
 
   const fundWallet = useCallback(async () => {
     try {

@@ -18,7 +18,7 @@ export const bundlrStore = create<BundlrStore>((set, get) => ({
         alert('please install metamask')
         return
       }
-      await window.ethereum.request!({ method: 'eth_requestAccounts' });
+      await window.ethereum.request!({ method: 'eth_requestAccounts' })
       const provider = new providers.Web3Provider(window.ethereum)
       await provider._ready()
       const bundlr = new WebBundlr(
@@ -47,3 +47,11 @@ export const bundlrStore = create<BundlrStore>((set, get) => ({
     }
   },
 }))
+
+export const useBundlrInstance = () =>
+  bundlrStore((state) => state.bundlrInstance)
+export const useBundlrBalance = () => bundlrStore((state) => state.balance)
+export const useInitializedBundlr = () =>
+  bundlrStore((state) => state.initialBundlr)
+export const useFetchBundlrBalance = () =>
+  bundlrStore((state) => state.fetchBalance)

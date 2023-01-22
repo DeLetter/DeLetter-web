@@ -12,7 +12,7 @@ const LoadData: React.FC = () => {
     handleSubmit: withForm,
     formState: { errors },
   } = useForm()
-  const bundlrInstance = useBundlrInstance();
+  const bundlrInstance = useBundlrInstance()
 
   const handleSubmit = useCallback(
     withForm(async (data) => {

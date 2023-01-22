@@ -1,4 +1,4 @@
 {
-  "**/*.{js,jsx,ts,tsx}": ["eslint --fix", "yarn format"],
-  "**/*.{css,scss,md,html,json}": ["yarn format"]
+  "**/*.{js,jsx,ts,tsx}": ["yarn format:eslint", "yarn format:style"],
+  "**/*.{css,scss,md,html,json}": ["yarn format:style"]
 }

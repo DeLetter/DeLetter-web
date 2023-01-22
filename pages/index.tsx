@@ -9,7 +9,8 @@ export default function Home() {
         priority
         src={Cover}
         alt="background image"
-        className="absolute w-full h-full z-[-1] opacity-50 select-none pointer-events-none" draggable={false}
+        className="absolute w-full h-full z-[-1] opacity-50 select-none pointer-events-none"
+        draggable={false}
       />
       <div className="flex flex-col justify-center w-[60%] z-10">
         <p className="text-center font-semibold text-[28px] leading-[36px]">

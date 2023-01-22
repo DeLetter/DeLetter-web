@@ -1,6 +1,10 @@
 import { useCallback } from 'react'
 import { BigNumber } from 'ethers'
-import { useBundlrInstance, useBundlrBalance, useFetchBundlrBalance } from '@store/Bundlr'
+import {
+  useBundlrInstance,
+  useBundlrBalance,
+  useFetchBundlrBalance,
+} from '@store/Bundlr'
 import UploadData from '@modules/UploadData'
 import LoadData from '@modules/LoadData'
 
@@ -35,8 +39,8 @@ export default function Home() {
         <div className="w-4/5">
           <div className="m-3 w-full flex justify-center bg-grey-100">
             <div className="font-bold text-[16px] bg-gray-200 p-5 text-red-500">
-              DeLetter&apos;s still developing. Many errors may occur, please pay
-              attention to your metamask transaction status and console!
+              DeLetter&apos;s still developing. Many errors may occur, please
+              pay attention to your metamask transaction status and console!
               <div className="text-center">
                 For any bug please use this form: <br />
                 <a

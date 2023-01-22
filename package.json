@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format:style": "prettier --write .",
+    "format:eslint": "eslint --fix ."
   },
   "dependencies": {
     "@bundlr-network/client": "^0.9.11",

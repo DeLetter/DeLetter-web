@@ -2,14 +2,15 @@ import { useEffect } from 'react'
 import Head from 'next/head'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { bundlrStore } from '@store/Bundlr'
+import { useInitializedBundlr, useFetchBundlrBalance } from '@store/Bundlr'
 import React from 'react'
 
 export default function App({ Component, pageProps }: AppProps) {
+  const initialBundlr = useInitializedBundlr()
+  const fetchBalance = useFetchBundlrBalance()
+
   const initialize = async () => {
-    const initialBundlr = bundlrStore.getState().initialBundlr
     await initialBundlr()
-    const fetchBalance = bundlrStore.getState().fetchBalance
     await fetchBalance()
   }
 

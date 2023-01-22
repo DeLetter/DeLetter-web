@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Encryption } from '@utils/AES/encryption'
-import { bundlrStore } from '@store/Bundlr'
+import { useBundlrInstance } from '@store/Bundlr'
 import { getAddress } from 'services/readAreave'
 import React from 'react'
 
@@ -12,7 +12,7 @@ const LoadData: React.FC = () => {
     handleSubmit: withForm,
     formState: { errors },
   } = useForm()
-  const bundlrInstance = bundlrStore.getState().bundlrInstance
+  const bundlrInstance = useBundlrInstance();
 
   const handleSubmit = useCallback(
     withForm(async (data) => {

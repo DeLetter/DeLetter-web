@@ -21,12 +21,20 @@ export default function Home() {
           ownership and privacy with blockchain,decentralized storage and
           cryptography technology
         </p>
-        <Link
-          href="/management"
-          className="p-2 mt-[14px] border-2 border-black rounded-md hover:bg-[#000000] hover:text-[#ffffff] text-center transition duration-300"
-        >
-          Start manage{' '}
-        </Link>
+        <div className='flex flex-row justify-around items-center'>
+          <Link
+            href="/upload"
+            className="p-2 mt-[14px] border-2 border-black rounded-md hover:bg-[#000000] hover:text-[#ffffff] text-center transition duration-300"
+          >
+            Upload and manage {' '}
+          </Link>
+          <Link
+            href="/download"
+            className="ml-[10px] p-2 mt-[14px] border-2 border-black rounded-md hover:bg-[#000000] hover:text-[#ffffff] text-center transition duration-300"
+          >
+            Download and contact{' '}
+          </Link>
+        </div>
       </div>
     </div>
   )

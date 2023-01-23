@@ -5,6 +5,7 @@ import { useBundlrInstance } from '@store/Bundlr'
 import { getAddress } from 'services/readAreave'
 import AuthConnectButton from '@modules/AuthConnectButton'
 
+//TODO: MOVE TO PAGES
 const LoadData: React.FC = () => {
   const [loadedData, setLoadedData] = useState('')
   const {

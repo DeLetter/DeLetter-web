@@ -8,7 +8,6 @@ import {
 import WarningBoard from '@modules/Warning'
 import AuthConnectButton from '@modules/AuthConnectButton'
 import UploadData from '@modules/UploadData'
-import LoadData from '@modules/LoadData'
 
 export default function Upload() {
   const bundlrInstance = useBundlrInstance()

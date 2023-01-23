@@ -6,7 +6,7 @@ import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
 
-//Store on Arweave and write related data on blockchain
+//TODO: MOVE TO PAGES
 const UploadData: React.FC = () => {
   const {
     register,
@@ -79,7 +79,7 @@ const UploadData: React.FC = () => {
         </label>
         <p className="mb-2">Data format: Name Email</p>
         <textarea
-          placeholder="tim timtimtim@deletter.com;"
+          placeholder="timtimtim@deletter.com;"
           rows={4}
           id="lists"
           {...register('lists', { required: true })}

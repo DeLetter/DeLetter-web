@@ -4,7 +4,7 @@ import Cover from '../public/cover.webp'
 
 export default function Home() {
   return (
-    <div className="flex flex-col justify-center items-center h-full">
+    <div className="absolute top-0 flex flex-col justify-center items-center h-full">
       <Image
         priority
         src={Cover}

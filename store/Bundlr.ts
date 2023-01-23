@@ -6,21 +6,32 @@ export interface BundlrStore {
   initialBundlr: () => Promise<void> | void
   bundlrInstance: WebBundlr | undefined | null
   balance: string
+  account: string
   fetchBalance: () => Promise<void> | void
 }
 
 export const bundlrStore = create<BundlrStore>((set, get) => ({
   bundlrInstance: null,
   balance: '',
+  account: '',
   initialBundlr: async () => {
     try {
       if (!window?.ethereum) {
         alert('please install metamask')
         return
       }
-      await window.ethereum.request!({ method: 'eth_requestAccounts' })
+      const addresses = await window.ethereum.request!({
+        method: 'eth_requestAccounts',
+      })
+      //TODO: seperate account and bundlr storage, they're not supposed to be the same storage
+      set({ account: addresses[0] })
       const provider = new providers.Web3Provider(window.ethereum)
       await provider._ready()
+      const chainId = await provider.getNetwork()
+      if (chainId.chainId != 5) {
+        alert('please switch to goerli network')
+        return
+      }
       const bundlr = new WebBundlr(
         'https://devnet.bundlr.network',
         'ethereum',
@@ -31,6 +42,7 @@ export const bundlrStore = create<BundlrStore>((set, get) => ({
       set({ bundlrInstance: bundlr })
     } catch (err) {
       console.log(err)
+      debugger
       alert('something went wrong')
     }
   },
@@ -55,3 +67,5 @@ export const useInitializedBundlr = () =>
   bundlrStore((state) => state.initialBundlr)
 export const useFetchBundlrBalance = () =>
   bundlrStore((state) => state.fetchBalance)
+
+export const useAccount = () => bundlrStore((state) => state.account)

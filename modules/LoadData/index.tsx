@@ -1,10 +1,11 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Encryption } from '@utils/AES/encryption'
 import { useBundlrInstance } from '@store/Bundlr'
 import { getAddress } from 'services/readAreave'
-import React from 'react'
+import AuthConnectButton from '@modules/AuthConnectButton'
 
+//TODO: MOVE TO PAGES
 const LoadData: React.FC = () => {
   const [loadedData, setLoadedData] = useState('')
   const {
@@ -37,7 +38,7 @@ const LoadData: React.FC = () => {
     <div className="flex flex-col justify-between">
       <form onSubmit={handleSubmit} className="mb-[19px]">
         <div className="mb-[14px] flex flex-col">
-          <label htmlFor="password">Enter your password: </label>
+          <label htmlFor="password">Enter your password(same password you set when uploading data): </label>
           <input
             type="password"
             id="enteredpassword"
@@ -48,11 +49,13 @@ const LoadData: React.FC = () => {
             <div className="text-red-500">This field is required</div>
           )}
         </div>
-        <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
-          Load data from arweave
-        </button>
+        <AuthConnectButton>
+          <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
+            Load data from arweave
+          </button>
+        </AuthConnectButton>
       </form>
-      <div className="flex-auto border-[2px] border-black border-dashed">
+      <div className="flex-auto min-h-[32px] border-[2px] border-black border-dashed">
         {loadedData}
       </div>
       <a

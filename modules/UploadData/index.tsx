@@ -1,12 +1,12 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useBundlrInstance } from '@store/Bundlr'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
-import React from 'react'
+import AuthConnectButton from '@modules/AuthConnectButton'
 
-//Store on Arweave and write related data on blockchain
+//TODO: MOVE TO PAGES
 const UploadData: React.FC = () => {
   const {
     register,
@@ -79,7 +79,7 @@ const UploadData: React.FC = () => {
         </label>
         <p className="mb-2">Data format: Name Email</p>
         <textarea
-          placeholder="tim timtimtim@deletter.com;"
+          placeholder="timtimtim@deletter.com;"
           rows={4}
           id="lists"
           {...register('lists', { required: true })}
@@ -107,9 +107,11 @@ const UploadData: React.FC = () => {
         Already entered all the email data and is quite aware of the password?
         Then it&apos;s time to encrypt these data and store in Arweave!
       </p>
-      <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
-        Encrypt and Store
-      </button>
+      <AuthConnectButton >
+        <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
+          Encrypt and Store
+        </button>
+      </AuthConnectButton>
       <h3 className="text-lg font-bold">Hash : </h3>
       {hash && <p className="text-green-500 break-all">{hash}</p>}
     </form>

@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navigation />
-      <main className='pt-[64px] flex flex-col items-center'>
+      <main className='flex flex-col items-center'>
         <Component {...pageProps} />
       </main>
     </>

@@ -1,22 +1,9 @@
-import { useEffect } from 'react'
 import Head from 'next/head'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { useInitializedBundlr, useFetchBundlrBalance } from '@store/Bundlr'
 import React from 'react'
 
 export default function App({ Component, pageProps }: AppProps) {
-  const initialBundlr = useInitializedBundlr()
-  const fetchBalance = useFetchBundlrBalance()
-
-  const initialize = async () => {
-    await initialBundlr()
-    await fetchBalance()
-  }
-
-  useEffect(() => {
-    initialize()
-  }, [])
 
   return (
     <>
@@ -29,7 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className='flex flex-col items-center'>
         <Component {...pageProps} />
       </main>
     </>

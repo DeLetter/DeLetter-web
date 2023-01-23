@@ -1,39 +1,19 @@
-import { providers } from 'ethers'
 import React, {
-  useState,
   type PropsWithChildren,
-  useCallback,
-  useEffect,
-} from 'react' // const ConnectButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ ...props }) => {
-//   const connectWallet = useCallback(async () => {
-//     if (!(window as any).ethereum) {
-//       alert('please install metamask')
-//     }
-//     await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
-//   }, [])
-//   return <button onClick={connectWallet} {...props}>Connect</button>
-// }
+} from 'react'
+import { useAccount, useInitializedBundlr } from '@store/Bundlr';
 
-// //For checking whether user is connected to the website, if connected, then render the children, if not, show connect button
-// const AuthConnectButton: React.FC<PropsWithChildren> = ({ children, ...props }) => {
-//   const [isConnected, setIsConnected] = useState(false);
-//   const checkConnection = useCallback(async () => {
-//     try {
-//       const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
-//       if (accounts.length > 0) {
-//         setIsConnected(true)
-//       }
-//     } catch (err) {
-//       console.log(err)
-//       alert('something went wrong')
-//     }
-//   }, [])
+const AuthConnectButton: React.FC<PropsWithChildren> = ({ children, ...props }) => {
+  const account = useAccount();
+  const initializedBundlr = useInitializedBundlr();
 
-//   useEffect(() => {
-//     checkConnection();
-//   }, []);
-//   if (isConnected) return children as React.ReactElement;
-//   return <ConnectButton {...props} />
-// }
+  if (!account) {
+    return <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300" onClick={initializedBundlr} {...props}>
+      Connect
+    </button>
+  }
+  return <>{children}</>
+}
 
-// export default AuthConnectButton;
+export default AuthConnectButton;
+

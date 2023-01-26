@@ -28,7 +28,6 @@ const toastsState = create<ToastState>((set, get) => ({
       set({ toasts: [] });
       return
     }, 3000);
-    console.log('newArr', newArr)
     set({ toasts: newArr })
     return
   }
@@ -56,7 +55,6 @@ export const showToast = toastsState.getState().showToast;
 
 export const ToastRender: React.FC = () => {
   const toasts = toastsState((state) => state.toasts);
-  console.log('toasts', toasts)
   return (
     <div className="fixed left-0 top-[100px] right-0 pointer-events-none flex flex-col justify-center items-center gap-[12px] z-40">
       {toasts.map(({ content, type, id }) => (

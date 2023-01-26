@@ -2,6 +2,7 @@ import create from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { WebBundlr } from '@bundlr-network/client'
 import { providers, utils } from 'ethers'
+import error from 'next/error'
 // import { debounce } from 'lodash-es';
 
 export interface BundlrStore {
@@ -10,6 +11,23 @@ export interface BundlrStore {
   balance: string
   account: string
   fetchBalance: () => Promise<void> | void
+  // disconnect: () => void
+}
+
+export const switchNetwork = async (chainId: number) => {
+  try {
+    await (window as any).ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: `0x${chainId.toString(16)}` }],
+    })
+  } catch (switchError: error | any) {
+    if (switchError.code === 4902) {
+      console.log(
+        'This network is not available in your metamask, please add it'
+      )
+    }
+    console.log('Failed to switch to the network')
+  }
 }
 
 export const bundlrStore = create(
@@ -32,7 +50,7 @@ export const bundlrStore = create(
         await provider._ready()
         const chainId = await provider.getNetwork()
         if (chainId.chainId != 5) {
-          alert('please switch to goerli network')
+          await switchNetwork(5)
           return
         }
         const bundlr = new WebBundlr(
@@ -72,6 +90,7 @@ export const useInitializedBundlr = () =>
 export const useFetchBundlrBalance = () =>
   bundlrStore((state) => state.fetchBalance)
 export const useAccount = () => bundlrStore((state) => state.account)
+// export const useDisconnect = () => bundlrStore((state) => state.disconnect)
 
 // const updateBundlrBalance = async () => {
 //   const fetchBalance = bundlrStore.getState().fetchBalance

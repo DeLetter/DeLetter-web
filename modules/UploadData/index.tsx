@@ -107,7 +107,7 @@ const UploadData: React.FC = () => {
         Already entered all the email data and is quite aware of the password?
         Then it&apos;s time to encrypt these data and store in Arweave!
       </p>
-      <AuthConnectButton >
+      <AuthConnectButton>
         <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
           Encrypt and Store
         </button>

@@ -1,6 +1,6 @@
-import React from "react";
-import WarningBoard from "@modules/Warning";
-import LoadData from "@modules/LoadData";
+import React from 'react'
+import WarningBoard from '@modules/Warning'
+import LoadData from '@modules/LoadData'
 
 const DownLoad: React.FC = () => {
   return (
@@ -11,4 +11,4 @@ const DownLoad: React.FC = () => {
   )
 }
 
-export default DownLoad;
+export default DownLoad

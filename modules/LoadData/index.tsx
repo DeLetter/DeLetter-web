@@ -38,7 +38,9 @@ const LoadData: React.FC = () => {
     <div className="flex flex-col justify-between">
       <form onSubmit={handleSubmit} className="mb-[19px]">
         <div className="mb-[14px] flex flex-col">
-          <label htmlFor="password">Enter your password(same password you set when uploading data): </label>
+          <label htmlFor="password">
+            Enter your password(same password you set when uploading data):{' '}
+          </label>
           <input
             type="password"
             id="enteredpassword"

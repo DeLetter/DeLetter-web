@@ -40,8 +40,7 @@ export default function Upload() {
         <WarningBoard />
         <ul>
           <li>
-            Please first have a metamask, then change the net to goerli
-            network
+            Please first have a metamask, then change the net to goerli network
           </li>
           <li>If you don&apos;t have funds on bundlr,please fund first</li>
           {/* <li>
@@ -57,10 +56,9 @@ export default function Upload() {
             client application in your laptop.
           </li> */}
         </ul>
-        <div className='mt-[24px]'>
+        <div className="mt-[24px]">
           <h3>Balance: {balance}</h3>
-          <AuthConnectButton
-          >
+          <AuthConnectButton>
             <button
               className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300"
               onClick={fundWallet}

@@ -1,7 +1,6 @@
 import React from 'react';
-import { atom, useRecoilValue } from 'recoil';
+import create from 'zustand';
 import cx from 'clsx';
-import { setRecoil } from 'recoil-nexus';
 import { uniqueId } from 'lodash-es';
 
 interface Toast {
@@ -9,33 +8,57 @@ interface Toast {
   type: 'success' | 'warning' | 'failed';
   id: string;
 }
+interface ToastState {
+  toasts: Array<Toast> | never[];
+  showToast: (param: Omit<Toast, 'id'> & { key?: string }) => void;
+}
 
-const toastsState = atom<Array<Toast>>({
-  key: 'toastState',
-  default: [],
-});
-
-export const showToast = (param: Omit<Toast, 'id'> & { key?: string }) => {
-  setRecoil(toastsState, (cur) => {
-    if (param.key && cur.find((item: Toast & { key?: string }) => item.key && item.key === param.key)) return cur;
+const toastsState = create<ToastState>((set, get) => ({
+  toasts: [],
+  showToast: (param: Omit<Toast, 'id'> & { key?: string }) => {
+    let cur = get().toasts;
+    if (param.key && cur.find((item: Toast & { key?: string }) => item.key && item.key === param.key)) { set({ toasts: cur }); return };
     const newArr = cur ? [...cur] : [];
     const id = uniqueId();
     newArr.push({ ...param, id });
     setTimeout(() => {
-      setRecoil(toastsState, (curAfter) => {
-        let newAfter = curAfter ? [...curAfter] : [];
-        newAfter = newAfter.filter((toast) => toast.id !== id);
-        return newAfter;
-      });
-    }, 1000);
-    return newArr;
-  });
-};
+      let curAfter = get().toasts;
+      let newAfter = curAfter ? [...curAfter] : [];
+      newAfter = newAfter.filter((toast) => toast.id !== id);
+      set({ toasts: [] });
+      return
+    }, 3000);
+    console.log('newArr', newArr)
+    set({ toasts: newArr })
+    return
+  }
+}));
+
+// export const showToast = (param: Omit<Toast, 'id'> & { key?: string }) => {
+//   // const cur= toastsState.getState();
+//   toastsState.setState((cur) => {
+//     if (param.key && cur.find((item: Toast & { key?: string }) => item.key && item.key === param.key)) return cur;
+//     const newArr = cur ? { ...cur } : [];
+//     const id = uniqueId();
+//     newArr.push({ ...param, id });
+//     setTimeout(() => {
+//       toastsState.setState((curAfter) => {
+//         let newAfter = curAfter ? [...curAfter] : [];
+//         newAfter = newAfter.filter((toast) => toast.id !== id);
+//         return newAfter;
+//       });
+//     }, 3000000);
+//     return newArr;
+//   });
+// };
+
+export const showToast = toastsState.getState().showToast;
 
 export const ToastRender: React.FC = () => {
-  const toasts = useRecoilValue(toastsState);
+  const toasts = toastsState((state) => state.toasts);
+  console.log('toasts', toasts)
   return (
-    <div className="fixed left-0 top-[65%] right-0 pointer-events-none flex flex-col justify-center items-center gap-[12px] z-40">
+    <div className="fixed left-0 top-[100px] right-0 pointer-events-none flex flex-col justify-center items-center gap-[12px] z-40">
       {toasts.map(({ content, type, id }) => (
         <div
           key={id}

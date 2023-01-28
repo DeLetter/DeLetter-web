@@ -14,11 +14,11 @@ export interface BundlrStore {
   // disconnect: () => void
 }
 
-export const switchNetwork = async (chainId: number) => {
+export const switchNetwork = async () => {
   try {
     await (window as any).ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: `0x${chainId.toString(16)}` }],
+      params: [{ chainId: `0x5` }],
     })
   } catch (switchError: error | any) {
     if (switchError.code === 4902) {
@@ -50,7 +50,7 @@ export const bundlrStore = create(
         await provider._ready()
         const chainId = await provider.getNetwork()
         if (chainId.chainId != 5) {
-          await switchNetwork(5)
+          await switchNetwork()
           return
         }
         const bundlr = new WebBundlr(

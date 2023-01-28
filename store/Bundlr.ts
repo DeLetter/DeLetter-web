@@ -63,7 +63,6 @@ export const bundlrStore = create(
         set({ bundlrInstance: bundlr })
       } catch (err) {
         console.log(err)
-        debugger
         alert('something went wrong')
       }
     },

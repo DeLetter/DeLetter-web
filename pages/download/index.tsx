@@ -1,6 +1,6 @@
 import React from 'react'
 import WarningBoard from '@modules/Warning'
-import LoadData from '@modules/LoadData'
+import LoadData from './LoadData'
 
 const DownLoad: React.FC = () => {
   return (

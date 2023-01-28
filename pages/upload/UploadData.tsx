@@ -6,7 +6,6 @@ import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
 
-//TODO: MOVE TO PAGES
 const UploadData: React.FC = () => {
   const {
     register,

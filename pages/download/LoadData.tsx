@@ -1,23 +1,27 @@
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import cx from 'clsx';
 import { Encryption } from '@utils/AES/encryption'
 import { useBundlrInstance } from '@store/Bundlr'
 import { getAddress } from 'services/readAreave'
 import AuthConnectButton from '@modules/AuthConnectButton'
+// import useInTranscation from '@hooks/useInTransaction'
 
 const LoadData: React.FC = () => {
   const [loadedData, setLoadedData] = useState('')
+  const [loading, setLoainding] = useState(false)
   const {
     register,
     handleSubmit: withForm,
     formState: { errors },
   } = useForm()
   const bundlrInstance = useBundlrInstance()
-
+  //TODO: Refactor this function to clear reduce useState hook
   const handleSubmit = useCallback(
     withForm(async (data) => {
       const { enteredpassword } = data
       try {
+        setLoainding(true)
         let arId = await getAddress()
         if (!arId) {
           console.log('arId is undefined, please retry')
@@ -35,10 +39,16 @@ const LoadData: React.FC = () => {
       } catch (err) {
         console.log(err)
         alert(`Failed to fetch data, please retry`)
+      } finally {
+        setLoainding(false)
       }
     }),
     [bundlrInstance]
   )
+  //TODO: extract requests 
+  // const { inTransaction, execTransaction } = useInTranscation(handleSubmit)
+
+
 
   return (
     <div className="flex flex-col justify-between">
@@ -58,8 +68,8 @@ const LoadData: React.FC = () => {
           )}
         </div>
         <AuthConnectButton>
-          <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
-            Load data from arweave
+          <button className={cx("w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300", loading && 'pointer-events-none')}>
+            {loading ? 'Loading...' : 'Load data from arweave'}
           </button>
         </AuthConnectButton>
       </form>

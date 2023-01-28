@@ -12,6 +12,7 @@ export const getAddress = async () => {
     const res = await baseContract.functions._addressList(
       bundlrInstance.address
     )
+    console.log('calling arweaveAddress')
     const arId: string | undefined = res.arweaveAddress
     return arId
   } catch (err) {

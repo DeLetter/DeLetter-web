@@ -7,7 +7,7 @@ import {
 } from '@store/Bundlr'
 import WarningBoard from '@modules/Warning'
 import AuthConnectButton from '@modules/AuthConnectButton'
-import UploadData from '@modules/UploadData'
+import UploadData from './UploadData'
 
 export default function Upload() {
   const bundlrInstance = useBundlrInstance()

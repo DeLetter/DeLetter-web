@@ -5,7 +5,6 @@ import { useBundlrInstance } from '@store/Bundlr'
 import { getAddress } from 'services/readAreave'
 import AuthConnectButton from '@modules/AuthConnectButton'
 
-//TODO: MOVE TO PAGES
 const LoadData: React.FC = () => {
   const [loadedData, setLoadedData] = useState('')
   const {
@@ -18,18 +17,25 @@ const LoadData: React.FC = () => {
   const handleSubmit = useCallback(
     withForm(async (data) => {
       const { enteredpassword } = data
-      const arId = await getAddress()
-      if (!arId) {
-        console.log('arId is undefined')
-        return
+      try {
+        let arId = await getAddress()
+        if (!arId) {
+          console.log('arId is undefined, please retry')
+          //TODO: temarary solution, need to improve
+          arId = await getAddress()
+          if (!arId) return
+        }
+        const res = await fetch(`https://arweave.net/${arId}`)
+        const arweaveRes = await res.json()
+        const decryptedData = await Encryption.decrypt(
+          arweaveRes,
+          enteredpassword
+        )
+        setLoadedData(JSON.stringify(decryptedData))
+      } catch (err) {
+        console.log(err)
+        alert(`Failed to fetch data, please retry`)
       }
-      const res = await fetch(`https://arweave.net/${arId}`)
-      const arweaveRes = await res.json()
-      const decryptedData = await Encryption.decrypt(
-        arweaveRes,
-        enteredpassword
-      )
-      setLoadedData(JSON.stringify(decryptedData))
     }),
     [bundlrInstance]
   )

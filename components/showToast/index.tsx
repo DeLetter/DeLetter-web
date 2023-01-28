@@ -33,28 +33,11 @@ const toastsState = create<ToastState>((set, get) => ({
   }
 }));
 
-// export const showToast = (param: Omit<Toast, 'id'> & { key?: string }) => {
-//   // const cur= toastsState.getState();
-//   toastsState.setState((cur) => {
-//     if (param.key && cur.find((item: Toast & { key?: string }) => item.key && item.key === param.key)) return cur;
-//     const newArr = cur ? { ...cur } : [];
-//     const id = uniqueId();
-//     newArr.push({ ...param, id });
-//     setTimeout(() => {
-//       toastsState.setState((curAfter) => {
-//         let newAfter = curAfter ? [...curAfter] : [];
-//         newAfter = newAfter.filter((toast) => toast.id !== id);
-//         return newAfter;
-//       });
-//     }, 3000000);
-//     return newArr;
-//   });
-// };
-
+const useToast = () => toastsState.getState().toasts;
 export const showToast = toastsState.getState().showToast;
 
 export const ToastRender: React.FC = () => {
-  const toasts = toastsState((state) => state.toasts);
+  const toasts = useToast();
   return (
     <div className="fixed left-0 top-[100px] right-0 pointer-events-none flex flex-col justify-center items-center gap-[12px] z-40">
       {toasts.map(({ content, type, id }) => (

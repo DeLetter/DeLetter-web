@@ -48,7 +48,7 @@ const UploadData: React.FC = () => {
         throw new Error('SetArweaveAddress')
       }
     },
-    [bundlrInstance]
+    []
   )
 
   const handleSubmit = useCallback(

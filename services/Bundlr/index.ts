@@ -5,6 +5,7 @@ import { subscribeWithSelector } from 'zustand/middleware'
 import { WebBundlr } from '@bundlr-network/client'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import { ONE_ETHER } from '@utils/constants'
+import { switchNetwork } from '@utils/AccountUtils'
 // import { debounce } from 'lodash-es';
 
 export interface BundlrStore {
@@ -17,22 +18,6 @@ export interface BundlrStore {
   uploadBundlr: (data: string) => Promise<UploadResponse | undefined>
   // downloadBundlr: (id: string) => Promise<string | undefined> | void
   // disconnect: () => void
-}
-
-export const switchNetwork = async (chainId: number) => {
-  try {
-    await (window as any).ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: `0x${chainId.toString(16)}` }],
-    })
-  } catch (switchError: error | any) {
-    if (switchError.code === 4902) {
-      console.log(
-        'This network is not available in your metamask, please add it'
-      )
-    }
-    console.log('Failed to switch to the network')
-  }
 }
 
 export const bundlrStore = create(
@@ -66,9 +51,9 @@ export const bundlrStore = create(
         )
         await bundlr.ready()
         set({ bundlrInstance: bundlr })
-      } catch (err) {
+      } catch (err: unknown | { message: string }) {
         console.log(err)
-        alert('something went wrong')
+        alert('Failed to initialize Bundlr')
       }
     },
     fetchBalance: async () => {

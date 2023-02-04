@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import Cover from '../public/cover.webp'
+import Cover from '../public/images/cover.webp'
 
 export default function Home() {
   return (

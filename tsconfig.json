@@ -22,7 +22,7 @@
       "@store/*": ["./store/*"],
       "@hooks/*": ["./hooks/*"],
       "@components/*": ["./components/*"],
-      // "@service/*": ["./service/*"],
+      "@services/*": ["./services/*"],
       "@contracts/*": ["./contracts/*"],
       "@styles/*": ["./styles/*"]
     }

@@ -1,17 +1,15 @@
-import { bundlrStore } from '@store/Bundlr'
+import { bundlrStore } from '@services/Bundlr'
 import { connectContract } from '@utils/contracts'
 
 export const getAddress = async () => {
-  const bundlrInstance = bundlrStore.getState().bundlrInstance
-  if (!bundlrInstance) {
-    console.log('bundlrInstance is undefined')
+  const address = bundlrStore.getState().account
+  if (!address) {
+    console.log('no address')
     return
   }
   try {
     const { baseContract } = await connectContract()
-    const res = await baseContract.functions._addressList(
-      bundlrInstance.address
-    )
+    const res = await baseContract.functions._addressList(address)
     console.log('calling arweaveAddress')
     const arId: string | undefined = res.arweaveAddress
     return arId

@@ -1,7 +1,7 @@
 import React, {
   type PropsWithChildren,
 } from 'react'
-import { useAccount, useInitializedBundlr } from '@store/Bundlr';
+import { useAccount, useInitializedBundlr } from '@services/Bundlr';
 
 const AuthConnectButton: React.FC<PropsWithChildren> = ({ children, ...props }) => {
   const account = useAccount();

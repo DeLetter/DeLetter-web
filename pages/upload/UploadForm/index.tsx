@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useBundlrInstance } from '@store/Bundlr'
+import { useBundlrInstance, useUploadBundlr } from '@services/Bundlr'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
 
-const UploadData: React.FC = () => {
+const UploadForm: React.FC = () => {
   const {
     register,
     handleSubmit: withForm,
@@ -15,22 +15,7 @@ const UploadData: React.FC = () => {
   const [hash, setHash] = useState('')
 
   const bundlrInstance = useBundlrInstance()
-
-  const uploadFile = useCallback(
-    async (data: string) => {
-      try {
-        const JSONData = JSON.stringify(data)
-        const tx = await bundlrInstance?.upload(JSONData, {
-          tags: [{ name: 'Content-Type', value: 'application/json' }],
-        })
-        return tx
-      } catch (err) {
-        console.log('error for uploadFile', err)
-        throw new Error('error for uploadFile')
-      }
-    },
-    [bundlrInstance]
-  )
+  const uploadBundlr = useUploadBundlr()
 
   const writeArweaveAdd = useCallback(
     async (bundlrTx: UploadResponse | undefined) => {
@@ -48,7 +33,7 @@ const UploadData: React.FC = () => {
         throw new Error('SetArweaveAddress')
       }
     },
-    [bundlrInstance]
+    []
   )
 
   const handleSubmit = useCallback(
@@ -57,14 +42,14 @@ const UploadData: React.FC = () => {
         const { lists, password } = data
         const encrypted = Encryption.encrypt(lists, password)
         console.log('encryptedData', encrypted)
-        const tx = await uploadFile(encrypted)
+        const tx = await uploadBundlr(encrypted)
         console.log(tx)
         const ftx = await writeArweaveAdd(tx)
         console.log('ftx', ftx)
         setHash(ftx.hash)
         alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
       } catch (err) {
-        alert('something went wrong')
+        alert(`something went wrong: ${err}`)
       }
     }),
     [bundlrInstance]
@@ -117,4 +102,4 @@ const UploadData: React.FC = () => {
   )
 }
 
-export default UploadData
+export default UploadForm

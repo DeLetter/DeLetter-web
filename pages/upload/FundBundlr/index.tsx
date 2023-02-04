@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import AuthConnectButton from '@modules/AuthConnectButton'
 import {
   useBundlrBalance,
@@ -22,7 +23,13 @@ const FundBundlr: React.FC = () => {
   }, [fundBundlr, fetchBalance])
   return (
     <>
-      <h3>Balance: {balance}</h3>
+      <ErrorBoundary
+        fallbackRender={(fallbackProps) => (
+          <ErrorBoundaryFallback {...fallbackProps} />
+        )}
+      >
+        <h3>Balance: {balance}</h3>
+      </ErrorBoundary>
       <AuthConnectButton>
         <button
           className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300"
@@ -33,6 +40,12 @@ const FundBundlr: React.FC = () => {
       </AuthConnectButton>
     </>
   )
+}
+
+const ErrorBoundaryFallback: React.FC<FallbackProps> = ({
+  resetErrorBoundary,
+}) => {
+  return <h3>Balance: </h3>
 }
 
 export default FundBundlr

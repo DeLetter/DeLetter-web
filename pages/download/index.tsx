@@ -1,12 +1,12 @@
 import React from 'react'
 import WarningBoard from '@modules/Warning'
-import LoadData from './LoadData'
+import DownloadForm from './DownloadForm'
 
 const DownLoad: React.FC = () => {
   return (
     <div className="w-4/5">
       <WarningBoard />
-      <LoadData />
+      <DownloadForm />
     </div>
   )
 }

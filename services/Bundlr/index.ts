@@ -3,16 +3,19 @@ import { providers, utils } from 'ethers'
 import error from 'next/error'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { WebBundlr } from '@bundlr-network/client'
+import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import { ONE_ETHER } from '@utils/constants'
 // import { debounce } from 'lodash-es';
 
 export interface BundlrStore {
-  initialBundlr: () => Promise<void> | void
   bundlrInstance: WebBundlr | undefined | null
   balance: string
   account: string
+  initialBundlr: () => Promise<void> | void
   fetchBalance: () => Promise<void> | void
   fundBundlr: () => Promise<void> | void
+  uploadBundlr: (data: string) => Promise<UploadResponse | undefined>
+  // downloadBundlr: (id: string) => Promise<string | undefined> | void
   // disconnect: () => void
 }
 
@@ -69,28 +72,48 @@ export const bundlrStore = create(
       }
     },
     fetchBalance: async () => {
+      const bundlrInstance = get().bundlrInstance
+      //TODO: not sure if this is the right way to do it
+      if (!bundlrInstance) throw new Error('Bundlr instance is not initialized')
       try {
-        const bundlr = get().bundlrInstance
-        if (bundlr) {
-          const balance = await bundlr.getLoadedBalance()
-          set({ balance: utils.formatEther(balance?.toString() ?? '0') })
-        }
+        const balance = await bundlrInstance.getLoadedBalance()
+        set({ balance: utils.formatEther(balance?.toString() ?? '0') })
       } catch (err) {
         console.log(err)
         throw new Error('Failed to fund Bundlr Balance')
       }
     },
     fundBundlr: async () => {
+      const bundlrInstance = get().bundlrInstance
+      //TODO: not sure if this is the right way to do it
+      if (!bundlrInstance) throw new Error('Bundlr instance is not initialized')
       try {
-        const bundlrInstance = get().bundlrInstance
         let amount = ONE_ETHER.div(10)
         const response = await bundlrInstance?.fund(amount.toString())
         console.log('Wallet funded: ', response)
       } catch (err) {
         console.log(err)
-        throw new Error('something went wrong')
+        throw new Error('Failed to fund Bundlr Balance')
       }
     },
+    uploadBundlr: async (data: string) => {
+      const bundlrInstance = get().bundlrInstance
+      //TODO: not sure if this is the right way to do it
+      if (!bundlrInstance) throw new Error('Bundlr instance is not initialized')
+      try {
+        const JSONData = JSON.stringify(data)
+        const tx = await bundlrInstance.upload(JSONData, {
+          tags: [{ name: 'Content-Type', value: 'application/json' }],
+        })
+        return tx
+      } catch (err) {
+        console.log('error for uploadFile', err)
+        throw new Error('Failed to upload on Arweave')
+      }
+    },
+    // downloadBundlr:async()=>{
+
+    // }
   }))
 )
 
@@ -102,6 +125,7 @@ export const useInitializedBundlr = () =>
 export const useFetchBundlrBalance = () =>
   bundlrStore((state) => state.fetchBalance)
 export const useFundBundlr = () => bundlrStore((state) => state.fundBundlr)
+export const useUploadBundlr = () => bundlrStore((state) => state.uploadBundlr)
 //TODO: Move account to another store
 export const useAccount = () => bundlrStore((state) => state.account)
 // export const useDisconnect = () => bundlrStore((state) => state.disconnect)
@@ -110,8 +134,12 @@ export const useAccount = () => bundlrStore((state) => state.account)
 //   const fetchBalance = bundlrStore.getState().fetchBalance
 //   await fetchBalance()
 // }
-bundlrStore.subscribe(
-  (state) => state.bundlrInstance,
-  bundlrStore.getState().fetchBalance,
-  { fireImmediately: true }
-)
+const fetchBalanceSub = async () => {
+  const bundlrInstance = bundlrStore.getState().bundlrInstance
+  if (!bundlrInstance) return
+  const fetchBalance = bundlrStore.getState().fetchBalance
+  fetchBalance()
+}
+bundlrStore.subscribe((state) => state.bundlrInstance, fetchBalanceSub, {
+  fireImmediately: true,
+})

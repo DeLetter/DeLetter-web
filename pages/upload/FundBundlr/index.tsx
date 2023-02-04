@@ -1,28 +1,25 @@
 import React, { useCallback } from 'react'
-import { ONE_ETHER } from '@utils/constants'
 import AuthConnectButton from '@modules/AuthConnectButton'
 import {
-  useBundlrInstance,
   useBundlrBalance,
   useFetchBundlrBalance,
+  useFundBundlr,
 } from '@services/Bundlr'
 
 const FundBundlr: React.FC = () => {
-  const bundlrInstance = useBundlrInstance()
   const balance = useBundlrBalance()
   const fetchBalance = useFetchBundlrBalance()
+  const fundBundlr = useFundBundlr()
 
   const fundWallet = useCallback(async () => {
     try {
-      let amount = ONE_ETHER.div(10)
-      const response = await bundlrInstance?.fund(amount.toString())
-      console.log('Wallet funded: ', response)
-      fetchBalance()
+      await fundBundlr()
+      await fetchBalance()
     } catch (err) {
       console.log(err)
       alert('something went wrong')
     }
-  }, [bundlrInstance, fetchBalance])
+  }, [fundBundlr, fetchBalance])
   return (
     <>
       <h3>Balance: {balance}</h3>

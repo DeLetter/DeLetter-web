@@ -1,8 +1,9 @@
 import { create } from 'zustand'
-import { subscribeWithSelector } from 'zustand/middleware'
-import { WebBundlr } from '@bundlr-network/client'
 import { providers, utils } from 'ethers'
 import error from 'next/error'
+import { subscribeWithSelector } from 'zustand/middleware'
+import { WebBundlr } from '@bundlr-network/client'
+import { ONE_ETHER } from '@utils/constants'
 // import { debounce } from 'lodash-es';
 
 export interface BundlrStore {
@@ -11,6 +12,7 @@ export interface BundlrStore {
   balance: string
   account: string
   fetchBalance: () => Promise<void> | void
+  fundBundlr: () => Promise<void> | void
   // disconnect: () => void
 }
 
@@ -75,7 +77,18 @@ export const bundlrStore = create(
         }
       } catch (err) {
         console.log(err)
-        alert('something went wrong')
+        throw new Error('Failed to fund Bundlr Balance')
+      }
+    },
+    fundBundlr: async () => {
+      try {
+        const bundlrInstance = get().bundlrInstance
+        let amount = ONE_ETHER.div(10)
+        const response = await bundlrInstance?.fund(amount.toString())
+        console.log('Wallet funded: ', response)
+      } catch (err) {
+        console.log(err)
+        throw new Error('something went wrong')
       }
     },
   }))
@@ -88,6 +101,8 @@ export const useInitializedBundlr = () =>
   bundlrStore((state) => state.initialBundlr)
 export const useFetchBundlrBalance = () =>
   bundlrStore((state) => state.fetchBalance)
+export const useFundBundlr = () => bundlrStore((state) => state.fundBundlr)
+//TODO: Move account to another store
 export const useAccount = () => bundlrStore((state) => state.account)
 // export const useDisconnect = () => bundlrStore((state) => state.disconnect)
 

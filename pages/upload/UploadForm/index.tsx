@@ -6,7 +6,7 @@ import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
 
-const UploadData: React.FC = () => {
+const UploadForm: React.FC = () => {
   const {
     register,
     handleSubmit: withForm,
@@ -117,4 +117,4 @@ const UploadData: React.FC = () => {
   )
 }
 
-export default UploadData
+export default UploadForm

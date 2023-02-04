@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useBundlrInstance, useUploadBundlr } from '@services/Bundlr'
+import { useUploadBundlr } from '@services/Bundlr'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
@@ -14,7 +14,6 @@ const UploadForm: React.FC = () => {
   } = useForm()
   const [hash, setHash] = useState('')
 
-  const bundlrInstance = useBundlrInstance()
   const uploadBundlr = useUploadBundlr()
 
   const writeArweaveAdd = useCallback(
@@ -52,7 +51,7 @@ const UploadForm: React.FC = () => {
         alert(`something went wrong: ${err}`)
       }
     }),
-    [bundlrInstance]
+    [uploadBundlr]
   )
   // TODO: add error notification
   return (

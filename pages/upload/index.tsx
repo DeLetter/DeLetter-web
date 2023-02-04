@@ -3,7 +3,7 @@ import {
   useBundlrInstance,
   useBundlrBalance,
   useFetchBundlrBalance,
-} from '@store/Bundlr'
+} from '@services/Bundlr'
 import WarningBoard from '@modules/Warning'
 import FundBundlr from './FundBundlr'
 import UploadData from './UploadData'

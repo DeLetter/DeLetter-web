@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import cx from 'clsx';
 import { Encryption } from '@utils/AES/encryption'
-import { useBundlrInstance } from '@store/Bundlr'
+import { useBundlrInstance } from '@services/Bundlr'
 import { getAddress } from 'services/readAreave'
 import AuthConnectButton from '@modules/AuthConnectButton'
 // import useInTranscation from '@hooks/useInTransaction'

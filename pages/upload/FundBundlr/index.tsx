@@ -5,7 +5,7 @@ import {
   useBundlrInstance,
   useBundlrBalance,
   useFetchBundlrBalance,
-} from '@store/Bundlr'
+} from '@services/Bundlr'
 
 const FundBundlr: React.FC = () => {
   const bundlrInstance = useBundlrInstance()

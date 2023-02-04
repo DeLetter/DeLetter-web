@@ -1,4 +1,4 @@
-import { bundlrStore } from '@store/Bundlr'
+import { bundlrStore } from '@services/Bundlr'
 import { connectContract } from '@utils/contracts'
 
 export const getAddress = async () => {

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useBundlrInstance } from '@store/Bundlr'
+import { useBundlrInstance } from '@services/Bundlr'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'

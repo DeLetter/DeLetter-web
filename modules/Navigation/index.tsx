@@ -4,16 +4,6 @@ import Link from 'next/link'
 import logo from '../../public/images/logo.png'
 import AuthConnectButton from '../AuthConnectButton'
 
-// const Navigation: React.FC = () => {
-//   return (
-//     <nav classNameNameName="sticky top-0 flex flex-row justify-center items-center h-[64px] text-gray-500">
-//       <div classNameName="w-4/5">
-//         <Link href="/upload">UploadData</Link>
-//         <Link href="/download" classNameName="ml-[10px]">DownloadData</Link>
-//       </div>
-//     </nav>
-//   )
-// }
 const Navigation: React.FC = () => {
   return (
     <nav className="bg-white fill-transparent px-2 sm:px-4 py-2.5 dark:bg-gray-900 w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">

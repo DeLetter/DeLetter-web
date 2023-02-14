@@ -7,7 +7,7 @@ import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import { ONE_ETHER } from '@utils/constants'
 import { switchNetwork } from '@utils/AccountUtils'
 // import { debounce } from 'lodash-es';
-
+import { connectWallet } from '@utils/AccountUtils'
 export interface BundlrStore {
   bundlrInstance: WebBundlr | undefined | null
   balance: string
@@ -27,16 +27,10 @@ export const bundlrStore = create(
     account: '',
     initialBundlr: async () => {
       try {
-        if (!window?.ethereum) {
-          alert('please install metamask')
-          return
-        }
-        const addresses = await window.ethereum.request!({
-          method: 'eth_requestAccounts',
-        })
+        const addresses = await connectWallet()
         //TODO: seperate account and bundlr storage, they're not supposed to be the same storage
-        set({ account: addresses[0] })
-        const provider = new providers.Web3Provider(window.ethereum)
+        set({ account: addresses })
+        const provider = new providers.Web3Provider(window.ethereum as any)
         await provider._ready()
         const chainId = await provider.getNetwork()
         if (chainId.chainId != 5) {

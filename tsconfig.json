@@ -27,6 +27,11 @@
       "@styles/*": ["./styles/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "modules/AuthConnectButton/constant/networkLogo.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "modules/AuthConnectButton/constant/chain-logo.tsx"
+  ],
   "exclude": ["node_modules"]
 }

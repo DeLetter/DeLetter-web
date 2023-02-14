@@ -1,6 +1,6 @@
 import React, { type PropsWithChildren } from 'react'
 import { useAccount, useInitializedBundlr } from '@services/Bundlr'
-import { EthereumLogo } from './constant/networkLogo'
+import { EthereumLogo, PolygonLogo } from './constant/chain-logo'
 import Image from 'next/image'
 
 const AuthConnectButton: React.FC<PropsWithChildren> = ({
@@ -18,7 +18,8 @@ const AuthConnectButton: React.FC<PropsWithChildren> = ({
           onClick={initializedBundlr}
           {...props}
         >
-          <EthereumLogo />
+          <EthereumLogo width="20px" height="20px" />
+          <PolygonLogo width="20px" height="20px" />
           Connect
         </button>
       </>

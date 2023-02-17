@@ -6,6 +6,10 @@ import { WebBundlr } from '@bundlr-network/client'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import { ONE_ETHER, GOERLI_CHAINID } from '@utils/constants'
 import { accountStore } from '@services/Account'
+import { ONE_ETHER } from '@utils/constants'
+import { switchNetwork } from '@utils/AccountUtils'
+// import { debounce } from 'lodash-es';
+import { getProvider } from '@utils/AccountUtils'
 
 export interface BundlrStore {
   bundlrInstance: WebBundlr | undefined | null
@@ -15,7 +19,6 @@ export interface BundlrStore {
   fundBundlr: () => Promise<void> | void
   uploadBundlr: (data: string) => Promise<UploadResponse | undefined>
   // downloadBundlr: (id: string) => Promise<string | undefined> | void
-  // disconnect: () => void
 }
 
 export const bundlrStore = create(
@@ -27,6 +30,17 @@ export const bundlrStore = create(
         const provider = accountStore.getState().provider
         bundlerReady(provider)
       } catch (err) {
+        console.log('Initializing Bundlr')
+        const provider = getProvider()
+        const bundlr = new WebBundlr(
+          'https://devnet.bundlr.network',
+          'ethereum',
+          provider,
+          { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
+        )
+        await bundlr.ready()
+        set({ bundlrInstance: bundlr })
+      } catch (err: unknown | { message: string }) {
         console.log(err)
         alert('Failed to initialize Bundlr')
       }

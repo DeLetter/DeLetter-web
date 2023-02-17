@@ -21,6 +21,7 @@ const LoadData: React.FC = () => {
       try {
         setLoainding(true)
         let arId = await getAddress()
+        console.log('arId', arId)
         if (!arId) {
           console.log('arId is undefined, please retry')
           //TODO: temarary solution, need to improve
@@ -28,6 +29,7 @@ const LoadData: React.FC = () => {
           if (!arId) return
         }
         const res = await fetch(`https://arweave.net/${arId}`)
+
         const arweaveRes = await res.json()
         const decryptedData = await Encryption.decrypt(
           arweaveRes,

@@ -5,6 +5,7 @@ import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
+import { update } from 'lodash-es'
 
 const UploadForm: React.FC = () => {
   const {
@@ -16,6 +17,12 @@ const UploadForm: React.FC = () => {
 
   const uploadBundlr = useUploadBundlr()
 
+  const checkArweaveRecord = useCallback(async (address: string) => {
+    const { baseContract } = await connectContract()
+    const emailList = await baseContract.functions._addressList(address)
+    return emailList
+  }, [])
+
   const writeArweaveAdd = useCallback(
     async (bundlrTx: UploadResponse | undefined) => {
       if (!bundlrTx) {
@@ -26,6 +33,25 @@ const UploadForm: React.FC = () => {
         const { id } = bundlrTx
         const { baseContract } = await connectContract()
         const tx = await baseContract.functions.setArweaveAddress(id)
+        return tx
+      } catch (err) {
+        console.log('SetArweaveAddress', err)
+        throw new Error('SetArweaveAddress')
+      }
+    },
+    []
+  )
+
+  const updateArweaveAdd = useCallback(
+    async (bundlrTx: UploadResponse | undefined) => {
+      if (!bundlrTx) {
+        console.log('bundlrTx is undefined')
+        return
+      }
+      try {
+        const { id } = bundlrTx
+        const { baseContract } = await connectContract()
+        const tx = await baseContract.functions.updateArweaveAddress(id)
         return tx
       } catch (err) {
         console.log('SetArweaveAddress', err)

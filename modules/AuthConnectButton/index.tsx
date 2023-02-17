@@ -5,6 +5,7 @@ import {
   useChainId,
   networkRefresher,
 } from '@services/Account'
+import { useBundlrInstance, useInitializedBundlr } from '@services/Bundlr'
 import { GOERLI_CHAINID } from '@utils/constants'
 import { switchNetwork } from '@utils/AccountUtils'
 
@@ -16,18 +17,22 @@ const AuthConnectButton: React.FC<PropsWithChildren> = ({
   const chainId = useChainId()
   const chainMatch = chainId === GOERLI_CHAINID
   const connect = useConnect()
+  const bundlr = useBundlrInstance()
+  const initializeBundlr = useInitializedBundlr()
   const handleClick = useCallback<
     React.MouseEventHandler<HTMLButtonElement>
   >(async () => {
     if (!account) {
       await connect()
-    } else {
+    } else if (!!account && !chainMatch) {
       await switchNetwork(5)
       await networkRefresher()
+    } else {
+      await initializeBundlr()
     }
-  }, [account, chainMatch])
+  }, [account, chainMatch, connect, initializeBundlr])
 
-  if (!account || !chainMatch) {
+  if (!account || !chainMatch || !bundlr) {
     return (
       <button
         className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300"
@@ -36,6 +41,7 @@ const AuthConnectButton: React.FC<PropsWithChildren> = ({
       >
         {!account && 'Connect'}
         {!!account && !chainMatch && 'Switch network to Goerli'}
+        {!!account && chainMatch && !bundlr && 'Initialize Bundlr'}
       </button>
     )
   }

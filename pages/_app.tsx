@@ -4,18 +4,19 @@ import { useEffect } from 'react'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import React from 'react'
+import { networkRefresher } from '@services/Account'
 import Navigation from '@modules/Navigation'
-import { ToastRender } from '@components/showToast';
+import { ToastRender } from '@components/showToast'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
-  useEffect(()=>{
-    if(window.ethereum){
+  useEffect(() => {
+    if (window.ethereum) {
       window.ethereum.on('chainChanged', () => {
-        window.location.reload()
+        networkRefresher()
       })
     }
-  },[])
+  }, [])
   return (
     <>
       <Head>

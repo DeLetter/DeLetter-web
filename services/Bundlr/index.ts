@@ -1,11 +1,11 @@
 import { create } from 'zustand'
-import { utils } from 'ethers'
+import { utils, providers } from 'ethers'
 import { subscribeWithSelector } from 'zustand/middleware'
+import { debounce } from 'lodash-es'
 import { WebBundlr } from '@bundlr-network/client'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import { ONE_ETHER, GOERLI_CHAINID } from '@utils/constants'
 import { accountStore } from '@services/Account'
-// import { switchNetwork } from '@utils/AccountUtils'
 
 export interface BundlrStore {
   bundlrInstance: WebBundlr | undefined | null
@@ -25,14 +25,7 @@ export const bundlrStore = create(
     initialBundlr: async () => {
       try {
         const provider = accountStore.getState().provider
-        const bundlr = new WebBundlr(
-          'https://devnet.bundlr.network',
-          'ethereum',
-          provider,
-          { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
-        )
-        await bundlr.ready()
-        set({ bundlrInstance: bundlr })
+        bundlerReady(provider)
       } catch (err) {
         console.log(err)
         alert('Failed to initialize Bundlr')
@@ -79,6 +72,25 @@ export const bundlrStore = create(
       }
     },
   }))
+)
+
+const bundlerReady = debounce(
+  async (provider: providers.Web3Provider | null) => {
+    try {
+      const bundlr = new WebBundlr(
+        'https://devnet.bundlr.network',
+        'ethereum',
+        provider,
+        { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
+      )
+      await bundlr.ready()
+      bundlrStore.setState({ bundlrInstance: bundlr })
+    } catch (err) {
+      console.log(err)
+      // alert('Failed to initialize Bundlr')
+    }
+  },
+  1000
 )
 
 export const useBundlrInstance = () =>

@@ -16,6 +16,12 @@ const UploadForm: React.FC = () => {
 
   const uploadBundlr = useUploadBundlr()
 
+  const checkArweaveRecord = useCallback(async (address: string) => {
+    const { baseContract } = await connectContract()
+    const emailList = await baseContract.functions._addressList(address)
+    return emailList
+  }, [])
+
   const writeArweaveAdd = useCallback(
     async (bundlrTx: UploadResponse | undefined) => {
       if (!bundlrTx) {
@@ -26,6 +32,25 @@ const UploadForm: React.FC = () => {
         const { id } = bundlrTx
         const { baseContract } = await connectContract()
         const tx = await baseContract.functions.setArweaveAddress(id)
+        return tx
+      } catch (err) {
+        console.log('SetArweaveAddress', err)
+        throw new Error('SetArweaveAddress')
+      }
+    },
+    []
+  )
+
+  const updateArweaveAdd = useCallback(
+    async (bundlrTx: UploadResponse | undefined) => {
+      if (!bundlrTx) {
+        console.log('bundlrTx is undefined')
+        return
+      }
+      try {
+        const { id } = bundlrTx
+        const { baseContract } = await connectContract()
+        const tx = await baseContract.functions.updateArweaveAddress(id)
         return tx
       } catch (err) {
         console.log('SetArweaveAddress', err)
@@ -90,11 +115,7 @@ const UploadForm: React.FC = () => {
         Already entered all the email data and is quite aware of the password?
         Then it&apos;s time to encrypt these data and store in Arweave!
       </p>
-      <AuthConnectButton>
-        <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
-          Encrypt and Store
-        </button>
-      </AuthConnectButton>
+      <AuthConnectButton>Encrypt and Store</AuthConnectButton>
       <h3 className="text-lg font-bold">Hash : </h3>
       {hash && <p className="text-green-500 break-all">{hash}</p>}
     </form>

@@ -1,6 +1,6 @@
-import React, { type HTMLAttributes } from 'react';
-import cx from 'clsx';
-import './index.css';
+import React, { type HTMLAttributes } from 'react'
+import cx from 'clsx'
+import './index.css'
 
 const Spin: React.FC<HTMLAttributes<HTMLDivElement>> = ({ className }) => {
   return (
@@ -9,7 +9,7 @@ const Spin: React.FC<HTMLAttributes<HTMLDivElement>> = ({ className }) => {
         <circle className="path" cx="50" cy="50" r="20" fill="none" />
       </svg>
     </span>
-  );
-};
+  )
+}
 
-export default Spin;
+export default Spin

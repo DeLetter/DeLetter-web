@@ -1,19 +1,74 @@
-import React, {
-  type PropsWithChildren,
-} from 'react'
-import { useAccount, useInitializedBundlr } from '@services/Bundlr';
+import React, { type PropsWithChildren, useCallback } from 'react'
+import {
+  useAccount,
+  useConnect,
+  useChainId,
+  networkRefresher,
+  useSwitchNetwork,
+} from '@services/Account'
+import { useBundlrInstance, useInitializedBundlr } from '@services/Bundlr'
+import { GOERLI_CHAINID } from '@utils/constants'
+import Button from '@components/Button'
 
-const AuthConnectButton: React.FC<PropsWithChildren> = ({ children, ...props }) => {
-  const account = useAccount();
-  const initializedBundlr = useInitializedBundlr();
+type PropsWithOnClick = PropsWithChildren<{
+  onClick?: () => void
+  className?: string
+}>
 
-  if (!account) {
-    return <button className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300" onClick={initializedBundlr} {...props}>
-      Connect
-    </button>
+const AuthConnectButton: React.FC<PropsWithOnClick> = ({
+  onClick,
+  children,
+  className,
+  ...props
+}) => {
+  const account = useAccount()
+  const chainId = useChainId()
+  const chainMatch = chainId === GOERLI_CHAINID
+  const connect = useConnect()
+  const switchNetwork = useSwitchNetwork()
+  const bundlr = useBundlrInstance()
+  const initializeBundlr = useInitializedBundlr()
+
+  const handleClick = useCallback<
+    React.MouseEventHandler<HTMLButtonElement>
+  >(async () => {
+    if (!account) {
+      await connect()
+    } else if (!!account && !chainMatch) {
+      await switchNetwork(5)
+      await networkRefresher()
+    } else {
+      await initializeBundlr()
+    }
+  }, [account, chainMatch, connect, initializeBundlr, switchNetwork])
+
+  const sliceAddress = (address: string) => {
+    return address.slice(0, 5) + '...' + address.slice(-5)
   }
-  return <>{children}</>
+
+  if (!account || !chainMatch || !bundlr) {
+    return (
+      <Button
+        onClick={handleClick}
+        {...props}
+        text={
+          !account
+            ? 'Connect to Arweave'
+            : !chainMatch
+            ? 'Switch to Goerli'
+            : 'Initialize Bundlr'
+        }
+      />
+    )
+  } else {
+    return children ? (
+      <Button onClick={onClick} className={className} {...props}>
+        {children}
+      </Button>
+    ) : (
+      <Button text={sliceAddress(account)} className={''} />
+    )
+  }
 }
 
-export default AuthConnectButton;
-
+export default AuthConnectButton

@@ -1,8 +1,8 @@
-import { bundlrStore } from '@services/Bundlr'
+import { accountStore } from '@services/Account'
 import { connectContract } from '@utils/contracts'
 
 export const getAddress = async () => {
-  const address = bundlrStore.getState().account
+  const address = accountStore.getState().account
   if (!address) {
     console.log('no address')
     return

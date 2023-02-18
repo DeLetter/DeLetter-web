@@ -1,56 +1,31 @@
 import { create } from 'zustand'
-import { providers, utils } from 'ethers'
-import error from 'next/error'
+import { utils, providers } from 'ethers'
 import { subscribeWithSelector } from 'zustand/middleware'
+import { debounce } from 'lodash-es'
 import { WebBundlr } from '@bundlr-network/client'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
-import { ONE_ETHER } from '@utils/constants'
-import { switchNetwork } from '@utils/AccountUtils'
+import { ONE_ETHER, GOERLI_CHAINID } from '@utils/constants'
+import { accountStore } from '@services/Account'
 // import { debounce } from 'lodash-es';
 
 export interface BundlrStore {
   bundlrInstance: WebBundlr | undefined | null
   balance: string
-  account: string
   initialBundlr: () => Promise<void> | void
   fetchBalance: () => Promise<void> | void
   fundBundlr: () => Promise<void> | void
   uploadBundlr: (data: string) => Promise<UploadResponse | undefined>
   // downloadBundlr: (id: string) => Promise<string | undefined> | void
-  // disconnect: () => void
 }
 
 export const bundlrStore = create(
   subscribeWithSelector<BundlrStore>((set, get) => ({
     bundlrInstance: null,
     balance: '',
-    account: '',
     initialBundlr: async () => {
       try {
-        if (!window?.ethereum) {
-          alert('please install metamask')
-          return
-        }
-        const addresses = await window.ethereum.request!({
-          method: 'eth_requestAccounts',
-        })
-        //TODO: seperate account and bundlr storage, they're not supposed to be the same storage
-        set({ account: addresses[0] })
-        const provider = new providers.Web3Provider(window.ethereum)
-        await provider._ready()
-        const chainId = await provider.getNetwork()
-        if (chainId.chainId != 5) {
-          await switchNetwork(5)
-          return
-        }
-        const bundlr = new WebBundlr(
-          'https://devnet.bundlr.network',
-          'ethereum',
-          provider,
-          { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
-        )
-        await bundlr.ready()
-        set({ bundlrInstance: bundlr })
+        const provider = accountStore.getState().provider
+        bundlerReady(provider)
       } catch (err: unknown | { message: string }) {
         console.log(err)
         alert('Failed to initialize Bundlr')
@@ -96,10 +71,26 @@ export const bundlrStore = create(
         throw new Error('Failed to upload on Arweave')
       }
     },
-    // downloadBundlr:async()=>{
-
-    // }
   }))
+)
+
+const bundlerReady = debounce(
+  async (provider: providers.Web3Provider | null) => {
+    try {
+      const bundlr = new WebBundlr(
+        'https://devnet.bundlr.network',
+        'ethereum',
+        provider,
+        { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
+      )
+      await bundlr.ready()
+      bundlrStore.setState({ bundlrInstance: bundlr })
+    } catch (err) {
+      console.log(err)
+      // alert('Failed to initialize Bundlr')
+    }
+  },
+  1000
 )
 
 export const useBundlrInstance = () =>
@@ -111,20 +102,37 @@ export const useFetchBundlrBalance = () =>
   bundlrStore((state) => state.fetchBalance)
 export const useFundBundlr = () => bundlrStore((state) => state.fundBundlr)
 export const useUploadBundlr = () => bundlrStore((state) => state.uploadBundlr)
-//TODO: Move account to another store
-export const useAccount = () => bundlrStore((state) => state.account)
 // export const useDisconnect = () => bundlrStore((state) => state.disconnect)
 
-// const updateBundlrBalance = async () => {
-//   const fetchBalance = bundlrStore.getState().fetchBalance
-//   await fetchBalance()
-// }
+const initialBundlrSub = async () => {
+  const { chainId, provider } = accountStore.getState()
+  if (provider && chainId === GOERLI_CHAINID) {
+    try {
+      const initialBundlr = bundlrStore.getState().initialBundlr
+      await initialBundlr()
+    } catch (err) {
+      console.log(err)
+      alert('Failed to initialize Bundlr')
+    }
+  }
+}
 const fetchBalanceSub = async () => {
   const bundlrInstance = bundlrStore.getState().bundlrInstance
   if (!bundlrInstance) return
-  const fetchBalance = bundlrStore.getState().fetchBalance
-  fetchBalance()
+  try {
+    const fetchBalance = bundlrStore.getState().fetchBalance
+    await fetchBalance()
+  } catch (err) {
+    console.log(err)
+    alert('Failed to fetch Bundlr Balance')
+  }
 }
 bundlrStore.subscribe((state) => state.bundlrInstance, fetchBalanceSub, {
   fireImmediately: true,
 })
+
+accountStore.subscribe(
+  (state) => [state.chainId, state.provider],
+  initialBundlrSub,
+  { fireImmediately: true }
+)

@@ -30,13 +30,8 @@ const FundBundlr: React.FC = () => {
       >
         <h3>Balance: {balance}</h3>
       </ErrorBoundary>
-      <AuthConnectButton>
-        <button
-          className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300"
-          onClick={fundWallet}
-        >
-          Fund 0.1 goerli eth in Wallet
-        </button>
+      <AuthConnectButton onClick={fundWallet}>
+        Fund 0.1 goerli eth in Wallet
       </AuthConnectButton>
     </>
   )

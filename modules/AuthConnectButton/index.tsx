@@ -4,12 +4,18 @@ import {
   useConnect,
   useChainId,
   networkRefresher,
+  useSwitchNetwork,
 } from '@services/Account'
 import { useBundlrInstance, useInitializedBundlr } from '@services/Bundlr'
 import { GOERLI_CHAINID } from '@utils/constants'
-import { switchNetwork } from '@utils/AccountUtils'
+import Button from '@components/Button'
 
-const AuthConnectButton: React.FC<PropsWithChildren> = ({
+type PropsWithOnClick = PropsWithChildren<{
+  onClick?: () => void
+}>
+
+const AuthConnectButton: React.FC<PropsWithOnClick> = ({
+  onClick,
   children,
   ...props
 }) => {
@@ -17,8 +23,10 @@ const AuthConnectButton: React.FC<PropsWithChildren> = ({
   const chainId = useChainId()
   const chainMatch = chainId === GOERLI_CHAINID
   const connect = useConnect()
+  const switchNetwork = useSwitchNetwork()
   const bundlr = useBundlrInstance()
   const initializeBundlr = useInitializedBundlr()
+
   const handleClick = useCallback<
     React.MouseEventHandler<HTMLButtonElement>
   >(async () => {
@@ -30,58 +38,35 @@ const AuthConnectButton: React.FC<PropsWithChildren> = ({
     } else {
       await initializeBundlr()
     }
-  }, [account, chainMatch, connect, initializeBundlr])
-
-  if (!account || !chainMatch || !bundlr) {
-    return (
-      <button
-        className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300"
-        onClick={handleClick}
-        {...props}
-      >
-        {!account && 'Connect'}
-        {!!account && !chainMatch && 'Switch network to Goerli'}
-        {!!account && chainMatch && !bundlr && 'Initialize Bundlr'}
-      </button>
-    )
-import React, { type PropsWithChildren } from 'react'
-import { useInitializedBundlr } from '@services/Bundlr'
-import Button from '@components/button'
-import { useWalletConnectStore, useAccount } from '@services/WalletConnecti'
-
-const AuthConnectButton: React.FC<PropsWithChildren> = ({
-  children,
-  ...props
-}) => {
-  const account = useAccount()
-  console.log('account', account)
-  //need to make sure that the wallet is initialized before we can use it
-  const initializedWallet = useWalletConnectStore()
-  
-  const initializedBundlr = useInitializedBundlr()
+  }, [account, chainMatch, connect, initializeBundlr, switchNetwork])
 
   const sliceAddress = (address: string) => {
     return address.slice(0, 5) + '...' + address.slice(-5)
   }
 
-  if (!account) {
+  if (!account || !chainMatch || !bundlr) {
     return (
       <Button
-        text="Connect to Arweave"
-        onClick={() => {
-          initializedWallet()
-          initializedBundlr()
-        }}
+        onClick={handleClick}
         {...props}
+        text={
+          !account
+            ? 'Connect to Arweave'
+            : !chainMatch
+            ? 'Switch to Goerli'
+            : 'Initialize Bundlr'
+        }
       />
     )
-  }
-  if (children) {
-    return <>{children}</>
   } else {
-    return <Button text={sliceAddress(account)} />
+    return children ? (
+      <Button onClick={onClick} {...props}>
+        {children}
+      </Button>
+    ) : (
+      <Button text={sliceAddress(account)} className={''} />
+    )
   }
 }
 
-export default AuthConnectButton
 export default AuthConnectButton

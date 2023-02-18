@@ -13,19 +13,18 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
   emailSubject,
   emailBody,
 }) => {
-  const [email, setEmail] = useState('')
-  const [emailSent, setEmailSent] = useState(false)
   const [emailError, setEmailError] = useState(false)
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
   const [emailLoading, setEmailLoading] = useState(false)
 
   const sendEmail = async () => {
+    console.log('sendEmail')
     setEmailLoading(true)
     try {
       const mailtoLink = `mailto:${emailTo}?subject=${emailSubject}&body=${emailBody}`
 
       window.location.href = mailtoLink
-    } catch (switchError: error | any) {
+    } catch (err: Error | any) {
       setEmailError(true)
       setEmailErrorMessage(err.message)
     } finally {
@@ -40,6 +39,7 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
       }
     >
       {emailLoading ? 'Sending...' : 'Send Email'}
+      {emailError && <Error statusCode={500} title={emailErrorMessage} />}
     </Button>
   )
 }

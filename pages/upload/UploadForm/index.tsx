@@ -5,7 +5,6 @@ import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
-import { update } from 'lodash-es'
 
 const UploadForm: React.FC = () => {
   const {

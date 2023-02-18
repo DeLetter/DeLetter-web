@@ -12,11 +12,13 @@ import Button from '@components/Button'
 
 type PropsWithOnClick = PropsWithChildren<{
   onClick?: () => void
+  className?: string
 }>
 
 const AuthConnectButton: React.FC<PropsWithOnClick> = ({
   onClick,
   children,
+  className,
   ...props
 }) => {
   const account = useAccount()
@@ -60,7 +62,7 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
     )
   } else {
     return children ? (
-      <Button onClick={onClick} {...props}>
+      <Button onClick={onClick} className={className} {...props}>
         {children}
       </Button>
     ) : (

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import cx from 'clsx'
 import { Encryption } from '@utils/AES/encryption'
@@ -6,9 +6,14 @@ import { getAddress } from 'services/readAreave'
 import AuthConnectButton from '@modules/AuthConnectButton'
 // import useInTranscation from '@hooks/useInTransaction'
 
-const LoadData: React.FC = () => {
+interface LoadDataProps {
+  onSetMailingList: (mailingList: string) => void
+}
+
+const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
   const [loadedData, setLoadedData] = useState('')
   const [loading, setLoainding] = useState(false)
+  const [error, setError] = useState('')
   const {
     register,
     handleSubmit: withForm,
@@ -45,6 +50,12 @@ const LoadData: React.FC = () => {
     }),
     []
   )
+
+  useEffect(() => {
+    if (loadedData) {
+      onSetMailingList(loadedData)
+    }
+  }, [loadedData, onSetMailingList])
   //TODO: extract requests
   // const { inTransaction, execTransaction } = useInTranscation(handleSubmit)
 
@@ -74,15 +85,9 @@ const LoadData: React.FC = () => {
           {loading ? 'Loading...' : 'Load data from arweave'}
         </AuthConnectButton>
       </form>
-      <div className="flex-auto min-h-[32px] border-[2px] border-black border-dashed">
+      <div className="flex-auto min-h-[32px] border-[2px] border-black border-dashed mb-[19px]">
         {loadedData}
       </div>
-      <a
-        className="mt-[19px] w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300"
-        href={`mailto:${loadedData}`}
-      >
-        Send emails
-      </a>
     </div>
   )
 }

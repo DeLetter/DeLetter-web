@@ -23,7 +23,7 @@ export default function Upload() {
           <FundBundlr />
           <UploadForm />
         </div>
-      </div> 
+      </div>
     </>
   )
 }

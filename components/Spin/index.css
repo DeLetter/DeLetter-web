@@ -6,7 +6,7 @@
 }
 
 .path {
-  stroke-width: .1em;
+  stroke-width: 0.1em;
   stroke-dasharray: 1, 200;
   stroke-dashoffset: 4;
   stroke: currentColor;
@@ -15,25 +15,25 @@
 
 @keyframes spin-rotation {
   0% {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   100% {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes spin-dash {
   0% {
-      stroke-dasharray: 1, 200;
-      stroke-dashoffset: 0;
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
   }
   50% {
-      stroke-dasharray: 89, 200;
-      stroke-dashoffset: -35px;
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
   }
   100% {
-      stroke-dasharray: 89, 200;
-      stroke-dashoffset: -124px;
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
   }
 }

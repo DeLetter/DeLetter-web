@@ -9,7 +9,7 @@ const EmailTemplate: React.FC<{ mailingList: string }> = ({ mailingList }) => {
 
   return (
     <>
-      <div>
+      <div className="mb-4">
         <h1>Email Template</h1>
         <label>Subject:</label>
         <input

@@ -12,7 +12,7 @@ interface LoadDataProps {
 
 const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
   const [loadedData, setLoadedData] = useState('')
-  const [loading, setLoainding] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const {
     register,
@@ -24,7 +24,7 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
     withForm(async (data) => {
       const { enteredpassword } = data
       try {
-        setLoainding(true)
+        setLoading(true)
         let arId = await getAddress()
         console.log('arId', arId)
         if (!arId) {
@@ -45,7 +45,7 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
         console.log(err)
         alert(`Failed to fetch data, please retry`)
       } finally {
-        setLoainding(false)
+        setLoading(false)
       }
     }),
     []

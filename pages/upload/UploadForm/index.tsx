@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useUploadBundlr } from '@services/Bundlr'
+import { EmailInfo } from '../../../types/email'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
@@ -92,8 +93,19 @@ const UploadForm: React.FC = () => {
   const handleSubmit = useCallback(
     withForm(async (data) => {
       try {
-        const { lists, password } = data
-        const encrypted = Encryption.encrypt(lists, password)
+        const { names, emails, password } = data
+        const nameList = names.split(';')
+        const emailList = emails.split(';')
+        const emailInfoList: EmailInfo[] = nameList.map(
+          (name: string, i: number) => {
+            return {
+              name: name,
+              email: emailList[i],
+            }
+          }
+        )
+        const eimalInfoReady = JSON.stringify(emailInfoList)
+        const encrypted = Encryption.encrypt(eimalInfoReady, password)
         console.log('encryptedData', encrypted)
         const tx = await uploadBundlr(encrypted)
         console.log(tx)
@@ -146,27 +158,29 @@ const UploadForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-[14px] flex flex-col">
-        <label htmlFor="lists">
+        <label>
           Please enter you email list(Please, separate each item with semicolon)
         </label>
-        <p className="mb-2">Data format: Name Email</p>
-        <textarea
-          placeholder="timtimtim@deletter.com;"
-          rows={4}
-          id="lists"
-          {...register('lists', { required: true })}
-          className="border-2"
-          value={lists}
-          onChange={(e) => {
-            setValue('lists', e.target.value)
-            if (hasEmailList) {
-              console.log('update')
-            }
-          }}
-        />
-        {errors.lists && (
-          <div className="text-red-500">This field is required</div>
-        )}
+        <div className="my-[14px] grid gird-rows-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            <label htmlFor="names">Please enter the name list</label>
+            <input
+              className="border-2"
+              id="names"
+              {...register('names')}
+              placeholder="ricy; tim"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <label htmlFor="emails">Please enter the email list</label>
+            <input
+              className="border-2"
+              id="emails"
+              {...register('emails')}
+              placeholder="ricy@deletter.com; tim@deletter.com"
+            />
+          </div>
+        </div>
       </div>
       <div className="mb-[14px] flex flex-col">
         <label className=" text-lg" htmlFor="password">

@@ -71,25 +71,6 @@ const UploadForm: React.FC = () => {
     []
   )
 
-  const handleUpdate = useCallback(
-    withForm(async (data) => {
-      try {
-        const { lists, password } = data
-        const encrypted = Encryption.encrypt(lists, password)
-        console.log('encryptedData', encrypted)
-        const tx = await uploadBundlr(encrypted)
-        console.log(tx)
-        const ftx = await updateArweaveAdd(tx)
-        console.log('ftx', ftx)
-        setHash(ftx.hash)
-        alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
-      } catch (err) {
-        alert(`something went wrong: ${err}`)
-      }
-    }),
-    [uploadBundlr]
-  )
-
   const handleSubmit = useCallback(
     withForm(async (data) => {
       try {
@@ -109,7 +90,13 @@ const UploadForm: React.FC = () => {
         console.log('encryptedData', encrypted)
         const tx = await uploadBundlr(encrypted)
         console.log(tx)
-        const ftx = await writeArweaveAdd(tx)
+        let ftx: any
+        if (hasEmailList) {
+          ftx = await updateArweaveAdd(tx)
+        } else {
+          ftx = await writeArweaveAdd(tx)
+        }
+
         console.log('ftx', ftx)
         setHash(ftx.hash)
         alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)

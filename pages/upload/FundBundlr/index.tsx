@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import AuthConnectButton from '@modules/AuthConnectButton'
+import Button from '@components/Button'
 import {
   useBundlrBalance,
   useFetchBundlrBalance,
@@ -30,8 +31,8 @@ const FundBundlr: React.FC = () => {
       >
         <h3>Balance: {balance}</h3>
       </ErrorBoundary>
-      <AuthConnectButton onClick={fundWallet}>
-        Fund 0.1 goerli eth in Wallet
+      <AuthConnectButton>
+        <Button onClick={fundWallet}>Fund 0.1 goerli eth in Wallet</Button>
       </AuthConnectButton>
     </>
   )

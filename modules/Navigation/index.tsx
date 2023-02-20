@@ -2,8 +2,16 @@ import React, { Fragment } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import logo from '../../public/images/logo.png'
+import { sliceAddress } from '@utils/addressUtils'
+import { useAccount } from '@services/Account'
 import AuthConnectButton from '../AuthConnectButton'
+import Button from '@components/Button'
 import { Popover, Transition } from '@headlessui/react'
+
+const NavWalletBtn: React.FC = () => {
+  const account = useAccount()
+  return <Button>{sliceAddress(account)}</Button>
+}
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -14,7 +22,9 @@ const Navigation: React.FC = () => {
           <Image className="mr-3 " src={logo} alt="logo" />
         </Link>
         <div className="flex md:order-2">
-          <AuthConnectButton />
+          <AuthConnectButton>
+            <NavWalletBtn />
+          </AuthConnectButton>
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
@@ -117,7 +127,9 @@ const Navigation: React.FC = () => {
                 </div>
               </div>
               <div>
-                <AuthConnectButton />
+                <AuthConnectButton>
+                  <NavWalletBtn />
+                </AuthConnectButton>
               </div>
             </div>
           </Popover>

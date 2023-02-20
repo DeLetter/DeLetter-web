@@ -6,7 +6,8 @@ import { Encryption } from '@utils/AES/encryption'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
 import { useAccount, useConnect } from '@services/Account'
-import { getAddress } from 'services/readAreave'
+import Button from '@components/Button'
+import { getAddress } from '@services/readAreave'
 
 const UploadForm: React.FC = () => {
   const {
@@ -197,7 +198,9 @@ const UploadForm: React.FC = () => {
         Then it&apos;s time to encrypt these data and store in Arweave!
       </p>
       <AuthConnectButton>
-        {hasEmailList ? 'Encrypt and Update' : 'Encrypt and Store'}
+        <Button>
+          {hasEmailList ? 'Encrypt and Update' : 'Encrypt and Store'}
+        </Button>
       </AuthConnectButton>
       <h3 className="text-lg font-bold">Hash : </h3>
       {hash && <p className="text-green-500 break-all">{hash}</p>}

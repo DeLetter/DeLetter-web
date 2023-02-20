@@ -42,10 +42,6 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
     }
   }, [account, chainMatch, connect, initializeBundlr, switchNetwork])
 
-  const sliceAddress = (address: string) => {
-    return address.slice(0, 5) + '...' + address.slice(-5)
-  }
-
   if (!account || !chainMatch || !bundlr) {
     return (
       <Button
@@ -61,13 +57,7 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
       />
     )
   } else {
-    return children ? (
-      <Button onClick={onClick} className={className} {...props}>
-        {children}
-      </Button>
-    ) : (
-      <Button text={sliceAddress(account)} className={''} />
-    )
+    return children as React.ReactElement
   }
 }
 

@@ -4,3 +4,8 @@ export interface Email {
   subject: string
   body: string
 }
+
+export interface EmailInfo {
+  name: string
+  email: string
+}

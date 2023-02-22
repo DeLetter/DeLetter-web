@@ -29,22 +29,20 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
   const bundlr = useBundlrInstance()
   const initializeBundlr = useInitializedBundlr()
 
-  const handleClick = useCallback<
-    React.MouseEventHandler<HTMLButtonElement>
-  >(async () => {
-    if (!account) {
-      await connect()
-    } else if (!!account && !chainMatch) {
-      await switchNetwork(5)
-      await networkRefresher()
-    } else {
-      await initializeBundlr()
-    }
-  }, [account, chainMatch, connect, initializeBundlr, switchNetwork])
-
-  const sliceAddress = (address: string) => {
-    return address.slice(0, 5) + '...' + address.slice(-5)
-  }
+  const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+    async (e) => {
+      e.preventDefault()
+      if (!account) {
+        await connect()
+      } else if (!!account && !chainMatch) {
+        await switchNetwork(5)
+        await networkRefresher()
+      } else {
+        await initializeBundlr()
+      }
+    },
+    [account, chainMatch, connect, initializeBundlr, switchNetwork]
+  )
 
   if (!account || !chainMatch || !bundlr) {
     return (
@@ -61,13 +59,7 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
       />
     )
   } else {
-    return children ? (
-      <Button onClick={onClick} className={className} {...props}>
-        {children}
-      </Button>
-    ) : (
-      <Button text={sliceAddress(account)} className={''} />
-    )
+    return children as React.ReactElement
   }
 }
 

@@ -4,6 +4,7 @@ import cx from 'clsx'
 import { Encryption } from '@utils/AES/encryption'
 import { getAddress } from 'services/readAreave'
 import AuthConnectButton from '@modules/AuthConnectButton'
+import Button from '@components/Button'
 // import useInTranscation from '@hooks/useInTransaction'
 
 interface LoadDataProps {
@@ -76,13 +77,15 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
             <div className="text-red-500">This field is required</div>
           )}
         </div>
-        <AuthConnectButton
-          className={cx(
-            'w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300',
-            loading && 'pointer-events-none'
-          )}
-        >
-          {loading ? 'Loading...' : 'Load data from arweave'}
+        <AuthConnectButton className="w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300">
+          <Button
+            className={cx(
+              'w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300',
+              loading && 'pointer-events-none'
+            )}
+          >
+            {loading ? 'Loading...' : 'Load data from arweave'}
+          </Button>
         </AuthConnectButton>
       </form>
       <div className="flex-auto min-h-[32px] border-[2px] border-black border-dashed mb-[19px]">

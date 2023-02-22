@@ -29,18 +29,20 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
   const bundlr = useBundlrInstance()
   const initializeBundlr = useInitializedBundlr()
 
-  const handleClick = useCallback<
-    React.MouseEventHandler<HTMLButtonElement>
-  >(async () => {
-    if (!account) {
-      await connect()
-    } else if (!!account && !chainMatch) {
-      await switchNetwork(5)
-      await networkRefresher()
-    } else {
-      await initializeBundlr()
-    }
-  }, [account, chainMatch, connect, initializeBundlr, switchNetwork])
+  const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+    async (e) => {
+      e.preventDefault()
+      if (!account) {
+        await connect()
+      } else if (!!account && !chainMatch) {
+        await switchNetwork(5)
+        await networkRefresher()
+      } else {
+        await initializeBundlr()
+      }
+    },
+    [account, chainMatch, connect, initializeBundlr, switchNetwork]
+  )
 
   if (!account || !chainMatch || !bundlr) {
     return (

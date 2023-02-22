@@ -1,14 +1,14 @@
-import Papa from 'papaparse';
+import Papa from 'papaparse'
 export const parseCSV = <T extends () => Promise<any>>(csv: File) => {
   //TODO: add type for the Promise
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     Papa.parse(csv, {
       complete: (results) => {
-        resolve(results.data);
+        resolve(results.data)
       },
       error: (error) => {
-        reject(error);
+        console.log('parseCSV error', error)
       },
-    });
-  });
-};
+    })
+  })
+}

@@ -8,7 +8,11 @@ import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
 import UpLoadCSV from '@modules/UploadCSV'
 import Button from '@components/Button'
+import { useAccount } from '@services/Account'
 
+interface errType {
+  message: string
+}
 //TODO: 1, upload instead of setting 2. retrieve the previous data before uploading the new one
 const UploadForm: React.FC = () => {
   const {
@@ -19,8 +23,37 @@ const UploadForm: React.FC = () => {
   } = useForm()
   const [hash, setHash] = useState('')
   const [isCSV, setIsCSV] = useState(false)
+  const account = useAccount()
 
   const uploadBundlr = useUploadBundlr()
+
+  const getArweaveAdd = useCallback(async () => {
+    try {
+      const { baseContract } = await connectContract()
+      const ArwAdd = await baseContract.functions._addressList(account)
+      return ArwAdd
+    } catch (err) {
+      throw new Error('Read Arweave address error')
+    }
+  }, [])
+
+  const uploadArweaveAdd = useCallback(
+    async (bundlrTx: UploadResponse | undefined) => {
+      if (!bundlrTx) {
+        console.log('bundlrTx is undefined')
+        return
+      }
+      try {
+        const { id } = bundlrTx
+        const { baseContract } = await connectContract()
+        const tx = await baseContract.functions.updateArweaveAddress(id)
+        return tx
+      } catch (err) {
+        throw new Error('UploadArweaveAddress')
+      }
+    },
+    []
+  )
 
   const writeArweaveAdd = useCallback(
     async (bundlrTx: UploadResponse | undefined) => {
@@ -34,7 +67,6 @@ const UploadForm: React.FC = () => {
         const tx = await baseContract.functions.setArweaveAddress(id)
         return tx
       } catch (err) {
-        console.log('SetArweaveAddress', err)
         throw new Error('SetArweaveAddress')
       }
     },
@@ -65,11 +97,18 @@ const UploadForm: React.FC = () => {
         console.log('encryptedData', encrypted)
         const tx = await uploadBundlr(encrypted)
         console.log(tx)
-        let ftx = await writeArweaveAdd(tx)
+        let arwAdd = await getArweaveAdd()
+        let ftx: { hash: string }
+        if (!arwAdd) {
+          ftx = await writeArweaveAdd(tx)
+        } else {
+          ftx = await uploadArweaveAdd(tx)
+        }
         console.log('ftx', ftx)
         setHash(ftx.hash)
         alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
       } catch (err) {
+        console.log(err)
         alert(`something went wrong: ${err}`)
       }
     },

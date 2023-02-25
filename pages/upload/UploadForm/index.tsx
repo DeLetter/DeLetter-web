@@ -4,9 +4,9 @@ import cx from 'clsx'
 import { useUploadBundlr } from '@services/Bundlr'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
-import { parseCSV } from '@utils/cvsUtils'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
+import UpLoadCSV from '@modules/UploadCSV'
 import Button from '@components/Button'
 
 //TODO: 1, upload instead of setting 2. retrieve the previous data before uploading the new one
@@ -37,23 +37,6 @@ const UploadForm: React.FC = () => {
         console.log('SetArweaveAddress', err)
         throw new Error('SetArweaveAddress')
       }
-    },
-    []
-  )
-
-  const handleCSVChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target?.files?.length) return
-      const csvResPromise = parseCSV(e.target?.files[0])
-      csvResPromise
-        .then((value) => {
-          let res: string[] = value as string[]
-          setValue('names', res[0])
-          setValue('rawEmails', res[1])
-        })
-        .catch((err) => {
-          console.log(err)
-        })
     },
     []
   )
@@ -142,20 +125,13 @@ const UploadForm: React.FC = () => {
           </div>
         )}
         {isCSV && (
-          <div className="flex items-center justify-center">
-            <input
-              type="file"
-              accept=".csv"
-              id="emailInfoList"
-              {...(register('emailInfoList'), { required: true })}
-              onChange={(e) => {
-                handleCSVChange(e)
-              }}
-            />
-            {errors.emailInfoList?.type === 'required' && (
-              <div className="text-red-500">This field is required</div>
-            )}
-          </div>
+          <UpLoadCSV
+            setValue={setValue}
+            register={register}
+            errors={errors}
+            firstLineName="names"
+            secondLineName="rawEmails"
+          />
         )}
       </div>
       <div className="mb-[14px] flex flex-col">

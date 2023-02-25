@@ -2,12 +2,11 @@ import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import cx from 'clsx'
 import { useUploadBundlr } from '@services/Bundlr'
-import { EmailInfo } from '../../../types/email'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
-import { parseCSV } from '@utils/cvsUtils'
 import { UploadResponse } from '@bundlr-network/client/build/common/types'
 import AuthConnectButton from '@modules/AuthConnectButton'
+import UpLoadCSV from '@modules/UploadCSV'
 import Button from '@components/Button'
 
 //TODO: 1, upload instead of setting 2. retrieve the previous data before uploading the new one
@@ -40,23 +39,6 @@ const UploadForm: React.FC = () => {
       }
     },
     []
-  )
-
-  const handleCSVChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target?.files?.length) return
-      const csvResPromise = parseCSV(e.target?.files[0])
-      csvResPromise
-        .then((value) => {
-          let res: string[] = value as string[]
-          setValue('names', res[0])
-          setValue('rawEmails', res[1])
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-    [setValue]
   )
 
   const handleSubmit = useCallback(
@@ -93,39 +75,6 @@ const UploadForm: React.FC = () => {
     },
     [uploadBundlr, isCSV]
   )
-
-  //   const check = async () => {
-  //     if (!account) {
-  //       await connect()
-  //     }
-  //     const emailList = await checkArweaveRecord(account)
-  //     console.log('emailList', emailList)
-  //     console.log(emailList[1])
-  //     if (emailList.length > 0) {
-  //       setHasEmailList(true)
-  //       let arId = await getAddress()
-  //       console.log('arId', arId)
-  //       if (!arId) {
-  //         console.log('arId is undefined, please retry')
-  //         //TODO: temarary solution, need to improve
-  //         arId = await getAddress()
-  //         if (!arId) return
-  //       }
-  //       const res = await fetch(`https://arweave.net/${arId}`)
-
-  //       const arweaveRes = await res.json()
-  //       console.log('arweaveRes', arweaveRes)
-  //       console.log('enteredpassword', getValues('password'))
-  //       const decryptedData = await Encryption.decrypt(
-  //         arweaveRes,
-  //         getValues('password')
-  //       )
-  //       setLists(decryptedData)
-  //       setValue('lists', decryptedData)
-  //     }
-  //   }
-  //   check()
-  // }, [account, checkArweaveRecord, connect, getValues, setValue])
 
   // TODO: add error notification
   return (
@@ -176,20 +125,13 @@ const UploadForm: React.FC = () => {
           </div>
         )}
         {isCSV && (
-          <div className="flex items-center justify-center">
-            <input
-              type="file"
-              accept=".csv"
-              id="emailInfoList"
-              {...(register('emailInfoList'), { required: true })}
-              onChange={(e) => {
-                handleCSVChange(e)
-              }}
-            />
-            {errors.emailInfoList?.type === 'required' && (
-              <div className="text-red-500">This field is required</div>
-            )}
-          </div>
+          <UpLoadCSV
+            setValue={setValue}
+            register={register}
+            errors={errors}
+            firstLineName="names"
+            secondLineName="rawEmails"
+          />
         )}
       </div>
       <div className="mb-[14px] flex flex-col">

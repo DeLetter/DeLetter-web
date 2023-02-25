@@ -64,7 +64,6 @@ export const useSwitchNetwork = () =>
   accountStore((state) => state.switchNetwork)
 
 export const networkRefresher = async () => {
-  debugger
   if (!window?.ethereum) {
     alert('Please install metamask')
     return

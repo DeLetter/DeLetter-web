@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import cx from 'clsx'
 import { useUploadBundlr } from '@services/Bundlr'
-import { EmailInfo } from '../../../types/email'
 import { connectContract } from '@utils/contracts'
 import { Encryption } from '@utils/AES/encryption'
 import { parseCSV } from '@utils/cvsUtils'
@@ -56,7 +55,7 @@ const UploadForm: React.FC = () => {
           console.log(err)
         })
     },
-    [setValue]
+    []
   )
 
   const handleSubmit = useCallback(
@@ -93,39 +92,6 @@ const UploadForm: React.FC = () => {
     },
     [uploadBundlr, isCSV]
   )
-
-  //   const check = async () => {
-  //     if (!account) {
-  //       await connect()
-  //     }
-  //     const emailList = await checkArweaveRecord(account)
-  //     console.log('emailList', emailList)
-  //     console.log(emailList[1])
-  //     if (emailList.length > 0) {
-  //       setHasEmailList(true)
-  //       let arId = await getAddress()
-  //       console.log('arId', arId)
-  //       if (!arId) {
-  //         console.log('arId is undefined, please retry')
-  //         //TODO: temarary solution, need to improve
-  //         arId = await getAddress()
-  //         if (!arId) return
-  //       }
-  //       const res = await fetch(`https://arweave.net/${arId}`)
-
-  //       const arweaveRes = await res.json()
-  //       console.log('arweaveRes', arweaveRes)
-  //       console.log('enteredpassword', getValues('password'))
-  //       const decryptedData = await Encryption.decrypt(
-  //         arweaveRes,
-  //         getValues('password')
-  //       )
-  //       setLists(decryptedData)
-  //       setValue('lists', decryptedData)
-  //     }
-  //   }
-  //   check()
-  // }, [account, checkArweaveRecord, connect, getValues, setValue])
 
   // TODO: add error notification
   return (

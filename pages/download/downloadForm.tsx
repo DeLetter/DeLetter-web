@@ -5,7 +5,7 @@ import { Encryption } from '@utils/AES/encryption'
 import { getAddress } from 'services/readAreave'
 import AuthConnectButton from '@modules/AuthConnectButton'
 import Button from '@components/Button'
-// import useInTranscation from '@hooks/useInTransaction'
+import useInTranscation from '@hooks/useInTransaction'
 
 interface LoadDataProps {
   onSetMailingList: (mailingList: string) => void
@@ -13,7 +13,6 @@ interface LoadDataProps {
 
 const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
   const [loadedData, setLoadedData] = useState('')
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const {
     register,
@@ -21,11 +20,10 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
     formState: { errors },
   } = useForm()
   //TODO: Refactor this function to clear reduce useState hook
-  const handleSubmit = useCallback(
+  const _handleSubmit = useCallback(
     withForm(async (data) => {
       const { enteredpassword } = data
       try {
-        setLoading(true)
         let arId = await getAddress()
         console.log('arId', arId)
         if (!arId) {
@@ -45,8 +43,6 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
       } catch (err) {
         console.log(err)
         alert(`Failed to fetch data, please retry`)
-      } finally {
-        setLoading(false)
       }
     }),
     []
@@ -58,7 +54,8 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
     }
   }, [loadedData, onSetMailingList])
   //TODO: extract requests
-  // const { inTransaction, execTransaction } = useInTranscation(handleSubmit)
+  const { inTransaction, execTransaction: handleSubmit } =
+    useInTranscation(_handleSubmit)
 
   return (
     <div className="flex flex-col justify-between">
@@ -81,10 +78,10 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
           <Button
             className={cx(
               'w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300',
-              loading && 'pointer-events-none'
+              inTransaction && 'pointer-events-none'
             )}
           >
-            {loading ? 'Loading...' : 'Load data from arweave'}
+            {inTransaction ? 'Loading...' : 'Load data from arweave'}
           </Button>
         </AuthConnectButton>
       </form>

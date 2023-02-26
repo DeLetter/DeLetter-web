@@ -1,6 +1,5 @@
 import React, { type HTMLAttributes } from 'react'
 import cx from 'clsx'
-import './index.css'
 
 const Spin: React.FC<HTMLAttributes<HTMLDivElement>> = ({ className }) => {
   return (

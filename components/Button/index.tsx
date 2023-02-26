@@ -1,4 +1,5 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
+import cx from 'clsx'
 
 type ButtonProps = {
   text?: string
@@ -16,10 +17,10 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={
-        className ||
+      className={cx(
+        className,
         'w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300'
-      }
+      )}
     >
       {text || children}
     </button>

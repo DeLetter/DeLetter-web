@@ -1,4 +1,5 @@
-import React, { type PropsWithChildren, useCallback } from 'react'
+import React, { useEffect, type PropsWithChildren, useCallback } from 'react'
+import cx from 'clsx'
 import {
   useAccount,
   useConnect,
@@ -9,6 +10,7 @@ import {
 import { useBundlrInstance, useInitializedBundlr } from '@services/Bundlr'
 import { GOERLI_CHAINID } from '@utils/constants'
 import Button from '@components/Button'
+import useInTranscation from '@hooks/useInTransaction'
 
 type PropsWithOnClick = PropsWithChildren<{
   onClick?: () => void
@@ -24,7 +26,8 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
   const account = useAccount()
   const chainId = useChainId()
   const chainMatch = chainId === GOERLI_CHAINID
-  const connect = useConnect()
+  const _connect = useConnect()
+  const { inTransaction, execTransaction: connect } = useInTranscation(_connect)
   const switchNetwork = useSwitchNetwork()
   const bundlr = useBundlrInstance()
   const initializeBundlr = useInitializedBundlr()
@@ -47,16 +50,22 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
   if (!account || !chainMatch || !bundlr) {
     return (
       <Button
+        className={cx(
+          className,
+          inTransaction && 'pointer-events-none opacity-30',
+          'flex flex-row justify-center items-center'
+        )}
         onClick={handleClick}
         {...props}
-        text={
-          !account
+      >
+        <>
+          {!account
             ? 'Connect to Arweave'
             : !chainMatch
             ? 'Switch to Goerli'
-            : 'Initialize Bundlr'
-        }
-      />
+            : 'Initialize Bundlr'}
+        </>
+      </Button>
     )
   } else {
     return children as React.ReactElement

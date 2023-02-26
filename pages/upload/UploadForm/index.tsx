@@ -9,6 +9,7 @@ import AuthConnectButton from '@modules/AuthConnectButton'
 import UpLoadCSV from '@modules/UploadCSV'
 import Button from '@components/Button'
 import { useAccount } from '@services/Account'
+import useInTranscation from '@hooks/useInTransaction'
 
 interface errType {
   message: string
@@ -73,7 +74,7 @@ const UploadForm: React.FC = () => {
     []
   )
 
-  const handleSubmit = useCallback(
+  const _handleSubmit = useCallback(
     async (data: any) => {
       try {
         const { names, rawEmails, password } = data
@@ -114,6 +115,9 @@ const UploadForm: React.FC = () => {
     },
     [uploadBundlr, isCSV]
   )
+
+  const { inTransaction, execTransaction: handleSubmit } =
+    useInTranscation(_handleSubmit)
 
   // TODO: add error notification
   return (
@@ -197,7 +201,14 @@ const UploadForm: React.FC = () => {
         Then it&apos;s time to encrypt these data and store in Arweave!
       </p>
       <AuthConnectButton>
-        <Button>Encrypt and Update</Button>
+        <Button
+          className={cx(
+            inTransaction && 'pointer-events-none opacity-30',
+            'flex flex-row justify-center items-center'
+          )}
+        >
+          Encrypt and Update
+        </Button>
       </AuthConnectButton>
       <h3 className="text-lg font-bold">Hash : </h3>
       {hash && <p className="text-green-500 break-all">{hash}</p>}

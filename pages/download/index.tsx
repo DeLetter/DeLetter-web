@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import WarningBoard from '@modules/Warning'
-import DownloadForm from './components/downloadForm'
-import EmailTemplate from '@pages/download/components/EmailTemplate'
+import DownloadForm from './downloadForm'
+import EmailTemplate from '@pages/download/EmailTemplate'
 
 const DownLoad: React.FC = () => {
   const [mailingList, setMailingList] = useState('')

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import QuillText from './quillText'
-import EmailSendingButton from '../emailButton'
+import EmailSendingButton from '../EmailButton'
 
 const EmailTemplate: React.FC<{ mailingList: string }> = ({ mailingList }) => {
   console.log('mailingList', mailingList)

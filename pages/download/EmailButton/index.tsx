@@ -22,7 +22,6 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
     setEmailLoading(true)
     try {
       const mailtoLink = `mailto:${emailTo}?subject=${emailSubject}&body=${emailBody}`
-
       window.location.href = mailtoLink
     } catch (err: Error | any) {
       setEmailError(true)

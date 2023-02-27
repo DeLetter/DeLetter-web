@@ -8,8 +8,8 @@ const DownLoad: React.FC = () => {
   return (
     <div className="w-4/5">
       <WarningBoard />
-      <DownloadForm onSetMailingList={setMailingList} />
-      <EmailTemplate mailingList={mailingList} />
+      <DownloadForm />
+      <EmailTemplate />
     </div>
   )
 }

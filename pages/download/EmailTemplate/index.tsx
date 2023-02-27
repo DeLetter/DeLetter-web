@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+import { useEmailList } from '@services/EmailList'
 import QuillText from './quillText'
 import EmailSendingButton from '../EmailButton'
 
-const EmailTemplate: React.FC<{ mailingList: string }> = ({ mailingList }) => {
-  console.log('mailingList', mailingList)
+const EmailTemplate: React.FC = () => {
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
+  const emailList = useEmailList()
 
   return (
     <>
@@ -18,10 +19,10 @@ const EmailTemplate: React.FC<{ mailingList: string }> = ({ mailingList }) => {
           onChange={(e) => setSubject(e.target.value)}
         />
         <QuillText value={body} onChange={setBody} />
-        <p>{mailingList}</p>
+        <p>{emailList}</p>
       </div>
       <EmailSendingButton
-        emailTo={mailingList}
+        emailTo={emailList}
         emailSubject={subject}
         emailBody={body}
       />

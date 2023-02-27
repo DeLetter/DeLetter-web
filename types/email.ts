@@ -6,6 +6,6 @@ export interface Email {
 }
 
 export interface EmailInfo {
-  name: string
+  name?: string
   email: string
 }

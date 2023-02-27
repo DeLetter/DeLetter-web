@@ -11,9 +11,6 @@ import Button from '@components/Button'
 import { useAccount } from '@services/Account'
 import useInTranscation from '@hooks/useInTransaction'
 
-interface errType {
-  message: string
-}
 //TODO: 1, upload instead of setting 2. retrieve the previous data before uploading the new one
 const UploadForm: React.FC = () => {
   const {

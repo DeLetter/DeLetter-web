@@ -3,22 +3,21 @@ import { useForm } from 'react-hook-form'
 import cx from 'clsx'
 import { Encryption } from '@utils/AES/encryption'
 import { getAddress } from 'services/readAreave'
+import { useEmailListStore } from '@services/EmailList'
 import AuthConnectButton from '@modules/AuthConnectButton'
 import Button from '@components/Button'
 import useInTranscation from '@hooks/useInTransaction'
 
-interface LoadDataProps {
-  onSetMailingList: (mailingList: string) => void
-}
-
-const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
-  const [loadedData, setLoadedData] = useState('')
-  const [error, setError] = useState('')
+const LoadData: React.FC = () => {
   const {
     register,
     handleSubmit: withForm,
     formState: { errors },
   } = useForm()
+  const { emailList, setEmailList } = useEmailListStore((state) => ({
+    emailList: state.emailList,
+    setEmailList: state.setEmailList,
+  }))
   //TODO: Refactor this function to clear reduce useState hook
   const _handleSubmit = useCallback(
     withForm(async (data) => {
@@ -39,7 +38,8 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
           arweaveRes,
           enteredpassword
         )
-        setLoadedData(JSON.stringify(decryptedData))
+        const parsedData = JSON.parse(decryptedData)
+        setEmailList(parsedData)
       } catch (err) {
         console.log(err)
         alert(`Failed to fetch data, please retry`)
@@ -48,11 +48,6 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
     []
   )
 
-  useEffect(() => {
-    if (loadedData) {
-      onSetMailingList(loadedData)
-    }
-  }, [loadedData, onSetMailingList])
   //TODO: extract requests
   const { inTransaction, execTransaction: handleSubmit } =
     useInTranscation(_handleSubmit)
@@ -78,7 +73,7 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
           <Button
             className={cx(
               'w-full border-2 border-black p-2 items-center rounded-md hover:bg-black hover:text-white transition duration-300',
-              inTransaction && 'pointer-events-none'
+              inTransaction && 'pointer-events-none opacity-30'
             )}
           >
             {inTransaction ? 'Loading...' : 'Load data from arweave'}
@@ -86,7 +81,7 @@ const LoadData: React.FC<LoadDataProps> = ({ onSetMailingList }) => {
         </AuthConnectButton>
       </form>
       <div className="flex-auto min-h-[32px] border-[2px] border-black border-dashed mb-[19px]">
-        {loadedData}
+        {emailList}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from '@components/Button'
 import Error from 'next/error'
-import { htmlToMarkdown } from '../EmailTemplate/Parser'
+import { htmlToMarkdown } from '../../../utils/Parser'
 
 type SendEmailButtonProps = {
   emailTo: string

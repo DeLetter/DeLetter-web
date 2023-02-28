@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Button from '@components/Button'
 import Error from 'next/error'
+import { htmlToMarkdown } from '../../../utils/Parser'
 
 type SendEmailButtonProps = {
   emailTo: string
@@ -16,18 +17,28 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
   const [emailError, setEmailError] = useState(false)
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
   const [emailLoading, setEmailLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
+  const [emailSentMessage, setEmailSentMessage] = useState('')
 
   const sendEmail = async () => {
-    console.log('sendEmail')
     setEmailLoading(true)
     try {
-      const mailtoLink = `mailto:${emailTo}?subject=${emailSubject}&body=${emailBody}`
-      window.location.href = mailtoLink
+      const markdownEmail = htmlToMarkdown(emailBody)
+
+      const response = await fetch('/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ emailTo, emailSubject, markdownEmail }),
+      })
     } catch (err: Error | any) {
       setEmailError(true)
+      console.log(err.message)
       setEmailErrorMessage(err.message)
     } finally {
       setEmailLoading(false)
+      setEmailSent(true)
     }
   }
   return (
@@ -39,6 +50,7 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
     >
       {emailLoading ? 'Sending...' : 'Send Email'}
       {emailError && <Error statusCode={500} title={emailErrorMessage} />}
+      {emailSent && <div>Email sent successfully</div>}
     </Button>
   )
 }

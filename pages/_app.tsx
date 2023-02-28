@@ -4,20 +4,26 @@ import { useEffect } from 'react'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import React from 'react'
-import { networkRefresher } from '@services/Account'
+import { networkRefresher, useConnect } from '@services/Account'
 import Navigation from '@modules/Navigation'
 import { ToastRender } from '@components/showToast'
 import 'react-quill/dist/quill.snow.css'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
+  const connect = useConnect()
+
   useEffect(() => {
     if (window.ethereum) {
       window.ethereum.on('chainChanged', () => {
         networkRefresher()
       })
+      window.ethereum.on('accountsChanged', () => {
+        connect()
+      })
     }
-  }, [])
+  }, [connect])
+
   return (
     <>
       <Head>

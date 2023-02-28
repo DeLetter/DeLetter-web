@@ -33,7 +33,7 @@ const UploadForm: React.FC = () => {
     } catch (err) {
       throw new Error('Read Arweave address error')
     }
-  }, [])
+  }, [account])
 
   const uploadArweaveAdd = useCallback(
     async (bundlrTx: UploadResponse | undefined) => {
@@ -90,8 +90,9 @@ const UploadForm: React.FC = () => {
             email: emailList[i],
           }
         })
-        const eimalInfoReady = JSON.stringify(emailInfoList)
-        const encrypted = Encryption.encrypt(eimalInfoReady, password)
+        const emailInfoReady = JSON.stringify(emailInfoList)
+        console.log('emailInfoReady', emailInfoReady)
+        const encrypted = Encryption.encrypt(emailInfoReady, password)
         console.log('encryptedData', encrypted)
         const tx = await uploadBundlr(encrypted)
         console.log(tx)
@@ -110,7 +111,7 @@ const UploadForm: React.FC = () => {
         alert(`something went wrong: ${err}`)
       }
     },
-    [uploadBundlr, isCSV]
+    [isCSV, uploadBundlr, getArweaveAdd, writeArweaveAdd, uploadArweaveAdd]
   )
 
   const { inTransaction, execTransaction: handleSubmit } =
@@ -155,7 +156,7 @@ const UploadForm: React.FC = () => {
               <input
                 className="border-2"
                 id="rawEmails"
-                {...(register('rawEmails'), { required: true })}
+                {...register('rawEmails')}
                 placeholder="ricy@deletter.com, tim@deletter.com"
               />
               {errors.rawEmails?.type === 'required' && (

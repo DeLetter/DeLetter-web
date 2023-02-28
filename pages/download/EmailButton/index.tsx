@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Button from '@components/Button'
 import Error from 'next/error'
+import axios from 'axios'
 
 type SendEmailButtonProps = {
   emailTo: string
@@ -16,18 +17,36 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
   const [emailError, setEmailError] = useState(false)
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
   const [emailLoading, setEmailLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
+  const [emailSentMessage, setEmailSentMessage] = useState('')
 
   const sendEmail = async () => {
     console.log('sendEmail')
     setEmailLoading(true)
     try {
-      const mailtoLink = `mailto:${emailTo}?subject=${emailSubject}&body=${emailBody}`
-      window.location.href = mailtoLink
+      console.log('emailTo', emailTo)
+      console.log('emailSubject', emailSubject)
+      console.log('emailBody', emailBody)
+      console.log(
+        'emailBody',
+        JSON.stringify({ emailTo, emailSubject, emailBody })
+      )
+
+      const response = await fetch('/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ emailTo, emailSubject, emailBody }),
+      })
+      console.log('response', response)
     } catch (err: Error | any) {
       setEmailError(true)
+      console.log(err.message)
       setEmailErrorMessage(err.message)
     } finally {
       setEmailLoading(false)
+      setEmailSent(true)
     }
   }
   return (
@@ -39,6 +58,7 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
     >
       {emailLoading ? 'Sending...' : 'Send Email'}
       {emailError && <Error statusCode={500} title={emailErrorMessage} />}
+      {emailSent && <div>Email sent successfully</div>}
     </Button>
   )
 }

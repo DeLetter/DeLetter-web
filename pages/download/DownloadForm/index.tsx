@@ -38,7 +38,10 @@ const LoadData: React.FC = () => {
           arweaveRes,
           enteredpassword
         )
+        console.log('decryptedData', decryptedData)
+
         const parsedData = JSON.parse(decryptedData)
+        console.log('parsedData', parsedData)
         setEmailList(parsedData)
       } catch (err) {
         console.log(err)

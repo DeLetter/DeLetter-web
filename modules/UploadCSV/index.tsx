@@ -36,7 +36,7 @@ const UpLoadCSV: React.FC<UpLoadCSVProps> = ({
           console.log(err)
         })
     },
-    []
+    [firstLineName, secondLineName, setValue]
   )
   return (
     <div className="flex items-center justify-center">

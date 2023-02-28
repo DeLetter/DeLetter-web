@@ -33,7 +33,7 @@ const UploadForm: React.FC = () => {
     } catch (err) {
       throw new Error('Read Arweave address error')
     }
-  }, [])
+  }, [account])
 
   const uploadArweaveAdd = useCallback(
     async (bundlrTx: UploadResponse | undefined) => {
@@ -111,7 +111,7 @@ const UploadForm: React.FC = () => {
         alert(`something went wrong: ${err}`)
       }
     },
-    [uploadBundlr, isCSV]
+    [isCSV, uploadBundlr, getArweaveAdd, writeArweaveAdd, uploadArweaveAdd]
   )
 
   const { inTransaction, execTransaction: handleSubmit } =

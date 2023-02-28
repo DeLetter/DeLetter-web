@@ -2,6 +2,7 @@
   "name": "deletter",
   "version": "0.1.0",
   "private": true,
+  "prepare": "husky install",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

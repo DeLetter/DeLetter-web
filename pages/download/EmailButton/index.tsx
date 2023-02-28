@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from '@components/Button'
 import Error from 'next/error'
-import axios from 'axios'
+import { htmlToMarkdown } from '../EmailTemplate/Parser'
 
 type SendEmailButtonProps = {
   emailTo: string
@@ -21,25 +21,17 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
   const [emailSentMessage, setEmailSentMessage] = useState('')
 
   const sendEmail = async () => {
-    console.log('sendEmail')
     setEmailLoading(true)
     try {
-      console.log('emailTo', emailTo)
-      console.log('emailSubject', emailSubject)
-      console.log('emailBody', emailBody)
-      console.log(
-        'emailBody',
-        JSON.stringify({ emailTo, emailSubject, emailBody })
-      )
+      const markdownEmail = htmlToMarkdown(emailBody)
 
       const response = await fetch('/api/sendEmail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ emailTo, emailSubject, emailBody }),
+        body: JSON.stringify({ emailTo, emailSubject, markdownEmail }),
       })
-      console.log('response', response)
     } catch (err: Error | any) {
       setEmailError(true)
       console.log(err.message)

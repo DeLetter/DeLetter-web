@@ -20,13 +20,7 @@ const EmailTemplate: React.FC = () => {
           onChange={(e) => setSubject(e.target.value)}
         />
         <label>Body:</label>
-        <input
-          type="text"
-          className="border-2"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
-        {/* <QuillText value={body} onChange={setBody} /> */}
+        <QuillText value={body} onChange={setBody} />
         <p>{emailList}</p>
       </div>
       <EmailSendingButton

@@ -1,14 +1,7 @@
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { providers } from 'ethers'
-import { Network, Alchemy } from 'alchemy-sdk'
 import error from 'next/error'
-
-const settings = {
-  apiKey: process.env.NEXT_ALCHEMY_API_KEY,
-  network: Network.ETH_GOERLI,
-}
-const alchemy = new Alchemy(settings)
 
 export interface AccountStore {
   account: string
@@ -34,7 +27,7 @@ export const accountStore = create(
         const addresses = await window.ethereum.request!({
           method: 'eth_requestAccounts',
         })
-        const chainId = await alchemy.core.getNetwork()
+        const chainId = await provider.getNetwork()
         set({
           account: addresses[0],
           chainId: chainId.chainId,
@@ -78,7 +71,7 @@ export const networkRefresher = async () => {
   try {
     const provider = new providers.Web3Provider(window.ethereum)
     await provider._ready()
-    const chainId = await alchemy.core.getNetwork()
+    const chainId = await provider.getNetwork()
     accountStore.setState({ provider: provider, chainId: chainId.chainId })
   } catch (err) {
     console.log(err)

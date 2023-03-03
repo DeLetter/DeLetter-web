@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { utils, providers } from 'ethers'
+import { ethers, providers } from 'ethers'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { debounce } from 'lodash-es'
 import { WebBundlr } from '@bundlr-network/client'
@@ -37,7 +37,7 @@ export const bundlrStore = create(
       if (!bundlrInstance) throw new Error('Bundlr instance is not initialized')
       try {
         const balance = await bundlrInstance.getLoadedBalance()
-        set({ balance: utils.formatEther(balance?.toString() ?? '0') })
+        set({ balance: ethers.utils.formatEther(balance?.toString() ?? '0') })
       } catch (err) {
         console.log(err)
         throw new Error('Failed to fund Bundlr Balance')

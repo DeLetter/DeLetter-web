@@ -19,11 +19,13 @@ export const fetchApi = (fetchParams: FetchParams) => {
     method: method,
   }
   if (method === 'GET') delete requestParams.body
-  if (method === 'POST')
-    //TODO
-    // fetcher = fetch(isLocalhost ? `/api/${path}` : process.env.NEXT_BACKEND_URL,{
-    fetcher = fetch(`/api/${path}`, {
-      ...requestParams,
-      headers: { 'content-Type': 'application/json' },
-    }).then((response) => response.json())
+  //TODO
+  // fetcher = fetch(isLocalhost ? `/api/${path}` : process.env.NEXT_BACKEND_URL,{
+  fetcher = fetch(`/api/${path}`, {
+    ...requestParams,
+    headers: { 'content-Type': 'application/json' },
+  }).then((response) => response.json())
+  return fetcher.then((result) => {
+    return result
+  })
 }

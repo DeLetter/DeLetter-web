@@ -19,6 +19,7 @@ const EmailSendingButton: React.FC<SendEmail> = ({
   const sendEmail = useCallback(async () => {
     try {
       await handleSendingEmail({ emailTo, emailSubject, emailBody })
+      console.log('intransaction', inTransaction)
     } catch (err) {
       console.log(err)
     }

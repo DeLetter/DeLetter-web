@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
 import Button from '@components/Button'
+import { SendEmail, handleSendingEmail } from '@services/EmailList'
 import Error from 'next/error'
-import { htmlToMarkdown } from '../../../utils/Parser'
 
-type SendEmailButtonProps = {
-  emailTo: string
-  emailSubject: string
-  emailBody: string
-}
-
-const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
+const EmailSendingButton: React.FC<SendEmail> = ({
   emailTo,
   emailSubject,
   emailBody,
@@ -20,26 +14,32 @@ const EmailSendingButton: React.FC<SendEmailButtonProps> = ({
   const [emailSent, setEmailSent] = useState(false)
   const [emailSentMessage, setEmailSentMessage] = useState('')
 
+  //TODO
   const sendEmail = async () => {
-    setEmailLoading(true)
     try {
-      const markdownEmail = htmlToMarkdown(emailBody)
-
-      const response = await fetch('/api/sendEmail', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ emailTo, emailSubject, markdownEmail }),
-      })
-    } catch (err: Error | any) {
-      setEmailError(true)
-      console.log(err.message)
-      setEmailErrorMessage(err.message)
-    } finally {
-      setEmailLoading(false)
-      setEmailSent(true)
+      let res = await handleSendingEmail({ emailTo, emailSubject, emailBody })
+    } catch (err) {
+      console.log(err)
     }
+    // setEmailLoading(true)
+    // try {
+    //   const markdownEmail = htmlToMarkdown(emailBody)
+
+    //   const response = await fetch('/api/sendEmail', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ emailTo, emailSubject, markdownEmail }),
+    //   })
+    // } catch (err: Error | any) {
+    //   setEmailError(true)
+    //   console.log(err.message)
+    //   setEmailErrorMessage(err.message)
+    // } finally {
+    //   setEmailLoading(false)
+    //   setEmailSent(true)
+    // }
   }
   return (
     <Button

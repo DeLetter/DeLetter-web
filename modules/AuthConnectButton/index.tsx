@@ -26,13 +26,12 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
   const account = useAccount()
   const chainId = useChainId()
   const chainMatch = chainId === GOERLI_CHAINID
-  const _connect = useConnect()
-  const { inTransaction, execTransaction: connect } = useInTranscation(_connect)
+  const connect = useConnect()
   const switchNetwork = useSwitchNetwork()
   const bundlr = useBundlrInstance()
   const initializeBundlr = useInitializedBundlr()
 
-  const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+  const _handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
     async (e) => {
       e.preventDefault()
       if (!account) {
@@ -46,6 +45,8 @@ const AuthConnectButton: React.FC<PropsWithOnClick> = ({
     },
     [account, chainMatch, connect, initializeBundlr, switchNetwork]
   )
+  const { inTransaction, execTransaction: handleClick } =
+    useInTranscation(_handleClick)
 
   if (!account || !chainMatch || !bundlr) {
     return (

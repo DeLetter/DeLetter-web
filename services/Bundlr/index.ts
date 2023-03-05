@@ -25,7 +25,14 @@ export const bundlrStore = create(
     initialBundlr: async () => {
       try {
         const provider = accountStore.getState().provider
-        bundlerReady(provider)
+        const bundlr = new WebBundlr(
+          'https://devnet.bundlr.network',
+          'ethereum',
+          provider,
+          { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
+        )
+        await bundlr.ready()
+        set({ bundlrInstance: bundlr })
       } catch (err: unknown | { message: string }) {
         console.log(err)
         alert('Failed to initialize Bundlr')
@@ -74,25 +81,6 @@ export const bundlrStore = create(
   }))
 )
 
-const bundlerReady = debounce(
-  async (provider: providers.Web3Provider | null) => {
-    try {
-      const bundlr = new WebBundlr(
-        'https://devnet.bundlr.network',
-        'ethereum',
-        provider,
-        { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
-      )
-      await bundlr.ready()
-      bundlrStore.setState({ bundlrInstance: bundlr })
-    } catch (err) {
-      console.log(err)
-      // alert('Failed to initialize Bundlr')
-    }
-  },
-  1000
-)
-
 export const useBundlrInstance = () =>
   bundlrStore((state) => state.bundlrInstance)
 export const useBundlrBalance = () => bundlrStore((state) => state.balance)
@@ -104,18 +92,6 @@ export const useFundBundlr = () => bundlrStore((state) => state.fundBundlr)
 export const useUploadBundlr = () => bundlrStore((state) => state.uploadBundlr)
 // export const useDisconnect = () => bundlrStore((state) => state.disconnect)
 
-const initialBundlrSub = async () => {
-  const { chainId, provider } = accountStore.getState()
-  if (provider && chainId === GOERLI_CHAINID) {
-    try {
-      const initialBundlr = bundlrStore.getState().initialBundlr
-      await initialBundlr()
-    } catch (err) {
-      console.log(err)
-      alert('Failed to initialize Bundlr')
-    }
-  }
-}
 const fetchBalanceSub = async () => {
   const bundlrInstance = bundlrStore.getState().bundlrInstance
   if (!bundlrInstance) return
@@ -131,8 +107,3 @@ bundlrStore.subscribe((state) => state.bundlrInstance, fetchBalanceSub, {
   fireImmediately: true,
 })
 
-accountStore.subscribe(
-  (state) => [state.chainId, state.provider],
-  initialBundlrSub,
-  { fireImmediately: true }
-)

@@ -78,3 +78,18 @@ export const networkRefresher = async () => {
     alert('Failed to update network')
   }
 }
+
+export const accountRefresher = async () => {
+  try {
+    let accounts = await await window.ethereum!.request!({
+      method: 'eth_accounts',
+    })
+    if (accounts.length===0) {
+      accountStore.setState({ account: '', provider: null, chainId: NaN })
+      return
+    }
+  } catch (err) {
+    console.log(err)
+    alert('Failed to update network')
+  }
+}

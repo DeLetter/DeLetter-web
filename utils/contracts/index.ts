@@ -3,7 +3,7 @@ import abiJSON from './abi/base.json'
 import { BASE_CONTRACT_ADDRESS } from '../constants'
 import { fetchApi } from '@utils/fetch/fetchApi'
 import { Alchemy, AlchemyProvider, Network, Wallet } from 'alchemy-sdk'
-
+import Encryption from '@utils/AES/encryption'
 //TODO: Abstract
 export const connectContract = async () => {
   const contractABI = abiJSON
@@ -12,11 +12,15 @@ export const connectContract = async () => {
     if (!ethereum || ethereum.chainId !== '0x5') {
       throw new Error('Please connect to the Goerli network.')
     }
-    const { privateKey, rpc } = await fetchApi({
+    const encrypt = await fetchApi({
       path: 'configInfo',
       method: 'GET',
     })
-
+    const decrypt = await Encryption.decrypt(
+      encrypt,
+      process.env.NEXT_PUBLIC_AES_KEY as string
+    )
+    const { rpc, privateKey } = JSON.parse(decrypt)
     const settings = {
       apiKey: rpc,
       network: Network.ETH_GOERLI, // Replace with your network.

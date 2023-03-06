@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 async function sendEmail(req: NextApiRequest, res: NextApiResponse) {
   const { emailTo, emailSubject, markdownEmail } = req.body
-  console.log('sendEmail materials', emailTo, emailSubject, markdownEmail)
 
   try {
     await axios.post(`${process.env.NEXT_BACKEND_URL}/send-email`, {

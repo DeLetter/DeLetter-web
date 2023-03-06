@@ -43,6 +43,7 @@ export const handleSendingEmail = async ({
         markdownEmail: markdownEmail,
       },
     })
+    
   } catch (err) {
     console.log(err)
   }

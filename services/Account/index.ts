@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { Alchemy, Network } from 'alchemy-sdk'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { providers } from 'ethers'
 import error from 'next/error'
@@ -22,12 +23,22 @@ export const accountStore = create(
           alert('Please install metamask')
           return
         }
+        const alchemy = new Alchemy({
+          apiKey: process.env.NEXT_PUBLIC_PROVIDER_RPC as string,
+          network: Network.ETH_GOERLI,
+        })
+        // const provider = await alchemy.config.getProvider()
+        // await provider._ready()
         const provider = new providers.Web3Provider(window.ethereum)
         await provider._ready()
+        console.log('provider', provider)
+
         const addresses = await window.ethereum.request!({
           method: 'eth_requestAccounts',
         })
+
         const chainId = await provider.getNetwork()
+        console.log('chainId', chainId)
         set({
           account: addresses[0],
           chainId: chainId.chainId,

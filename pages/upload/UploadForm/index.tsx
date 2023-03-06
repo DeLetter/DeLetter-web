@@ -44,9 +44,11 @@ const UploadForm: React.FC = () => {
       try {
         const { id } = bundlrTx
         const { baseContract } = await connectContract()
+
         const tx = await baseContract.functions.updateArweaveAddress(id)
         return tx
       } catch (err) {
+        console.log(err)
         throw new Error('UploadArweaveAddress')
       }
     },
@@ -95,17 +97,20 @@ const UploadForm: React.FC = () => {
         const encrypted = Encryption.encrypt(emailInfoReady, password)
         console.log('encryptedData', encrypted)
         const tx = await uploadBundlr(encrypted)
-        console.log(tx)
+        console.log('tx', tx)
         let arwAdd = await getArweaveAdd()
+        console.log('arwAdd', arwAdd)
         let ftx: { hash: string }
         if (!arwAdd) {
+          console.log('writing')
           ftx = await writeArweaveAdd(tx)
         } else {
+          console.log('uploading')
           ftx = await uploadArweaveAdd(tx)
         }
         console.log('ftx', ftx)
-        setHash(ftx.hash)
-        alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
+        // setHash(ftx.hash)
+        // alert(`sucessfully stored on arweave and blockchain, hash: ${ftx.hash}`)
       } catch (err) {
         console.log(err)
         alert(`something went wrong: ${err}`)

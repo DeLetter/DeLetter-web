@@ -81,7 +81,10 @@ const bundlerReady = debounce(
         'https://devnet.bundlr.network',
         'ethereum',
         provider,
-        { providerUrl: 'https://ethereum-goerli-rpc.allthatnode.com' }
+        {
+          providerUrl:
+            'https://eth-goerli.g.alchemy.com/v2/BCfgN9cqQIV5lxjypd8ACpptnD0MIyUm',
+        }
       )
       await bundlr.ready()
       bundlrStore.setState({ bundlrInstance: bundlr })

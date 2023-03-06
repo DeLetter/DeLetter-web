@@ -6,6 +6,7 @@ import {
 } from '@services/EmailList'
 import cx from 'clsx'
 import useInTransaction from '@hooks/useInTransaction'
+import { showToast } from '@components/showToast'
 import Error from 'next/error'
 
 const EmailSendingButton: React.FC<SendEmail> = ({
@@ -23,7 +24,7 @@ const EmailSendingButton: React.FC<SendEmail> = ({
     } catch (err) {
       console.log(err)
     }
-  }, [emailTo, emailSubject, emailBody])
+  }, [handleSendingEmail, emailTo, emailSubject, emailBody, inTransaction])
   return (
     <Button
       onClick={sendEmail}

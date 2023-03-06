@@ -36,7 +36,7 @@ const FundBundlr: React.FC = () => {
           <ErrorBoundaryFallback {...fallbackProps} />
         )}
       >
-        <h3>Balance: {balance}</h3>
+        <h3>Balance: {balance || 0.0}</h3>
       </ErrorBoundary>
       <AuthConnectButton>
         <Button

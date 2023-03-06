@@ -1,6 +1,6 @@
 import Bundlr from '@bundlr-network/client'
 
-const jwk: string = JSON.parse(process.env.PRIVATE_KEY ?? '')
+const jwk: string = JSON.parse(process.env.NEXT_PRIVATE_KEY ?? '')
 
 const devnet = 'https://devnet.bundlr.network/'
 

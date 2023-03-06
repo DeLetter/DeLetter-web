@@ -6,7 +6,6 @@ import {
 } from '@services/EmailList'
 import cx from 'clsx'
 import useInTransaction from '@hooks/useInTransaction'
-import Error from 'next/error'
 
 const EmailSendingButton: React.FC<SendEmail> = ({
   emailTo,

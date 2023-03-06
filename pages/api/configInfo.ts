@@ -4,10 +4,9 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 async function configInfo(req: NextApiRequest, res: NextApiResponse) {
   try {
-    console.log('configInfo')
     await axios
-      //   .get(`${process.env.NEXT_BACKEND_URL}/config-info`)
-      .get(`http://localhost:5363/config-info`)
+      .get(`${process.env.NEXT_BACKEND_URL}/config-info`)
+      // .get(`http://localhost:5363/config-info`)
       .then((response) => {
         res.status(200).json(response.data)
       })

@@ -51,7 +51,6 @@ const LoadData: React.FC = () => {
     []
   )
 
-  //TODO: extract requests
   const { inTransaction, execTransaction: handleSubmit } =
     useInTranscation(_handleSubmit)
 

@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { EventEmitter } from 'stream'
 
-//TODO: temperary solution, change provider type
+//TODO: CHANGE PROVIDER
 interface TEthereumProvider
   extends ethers.providers.ExternalProvider,
     EventEmitter {
